@@ -2,7 +2,7 @@
 
 class Finite_Automata(object):
   def __init__(self, states):
-    #	[transition, final, initial]
+    #	[transitions, final, initial]
     #	Example state: 
     #	q0 = [[a : q2, b : q3], false, true]
     
