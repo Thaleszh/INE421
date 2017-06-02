@@ -6,6 +6,6 @@ class Finite_Automata(object):
     #	Example state: 
     #	q0 = [[a : q2, b : q3], false, true]
     #
-  self.fa_data = {}
-  for state in states:
-    self.fa_data[state] = [state.getTransitions(), state.getFinal(), state.getInitial()]
+    self.fa_data = {}
+    for state in states:
+      self.fa_data[state] = [state.getTransitions(), state.getFinal(), state.getInitial()]
