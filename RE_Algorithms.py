@@ -2,10 +2,12 @@ alphabet = set()
 non_alphabet = set(['*', '.', '|', '?'])
 
 def de_simone(re):
-	#adding . to separate letters
+	# adding . to separate letters
 	dotted = dot_placer(re)
 	indexes = index_noncharacters(re)
-
+	nodes = []
+	# for each | make a node with it, associating anything in its left and its right
+	for index in indexes[0]:
 	
 
 # Returns the index of all the non alphabet symbols in the string, 
@@ -42,7 +44,7 @@ def index_noncharacters(re):
 	return indexes
 
 
-#adds '.' to separate alphabet characters, adds characters to alphabet
+# adds '.' to separate alphabet characters, adds characters to alphabet
 def dot_placer(re):
 	first = True
 	new_re = ''
@@ -57,7 +59,7 @@ def dot_placer(re):
     			# if char is ')', the dot isnt needed
     			if char != ')':
     				new_re += '.'
-    				#if char is '(', there wont be a dot afterwards
+    				# if char is '(', there wont be a dot afterwards
 	    			if char == '(':
 	    				first = True
     	else:
