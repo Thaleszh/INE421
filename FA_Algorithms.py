@@ -39,7 +39,7 @@ def minimize(fa):
     set_KF = set(x for x in fa.states not in finals}
 
     for s in set_F:
-
+############################
 
 def determinize(fa):
     pass
@@ -79,6 +79,7 @@ def union(fa1, fa2):
             fa3.create_transition2(s,fa2.transitions[s][k], k)
 
     determinize(fa3)
+    return(fa3)
 
 def complement(fa1):
     fa2 = Finite_Automata([])
