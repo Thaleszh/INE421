@@ -6,6 +6,7 @@ class Finite_Automata(object):
         self.initials = []
         self.finals = []
         self.transitions = {}
+        self.alphabet = []
         #	[transitions, final, initial]
         #	Example state: 
         #	q0 = [[a : q2, b : q3], false, true]
@@ -16,13 +17,16 @@ class Finite_Automata(object):
             if state.final is True:
                 self.finals.append(state.name)
             self.transitions[state.name] = state.transitions
+            for k in state.transitions.keys():
+                if k not in alphabet:
+                    self.alphabet.append(k)
        
-    def make_final(state):
-        if state.final
+    def add_final(state):
+        if state.final:
             self.finals.append(state.name)
 
-    def make_initial(state):
-        if state.initial
+    def add_initial(state):
+        if state.initial:
             self.initials.append(state.name)
 
     def create_state1(self, state):
@@ -31,6 +35,9 @@ class Finite_Automata(object):
         if state.final is True:
             self.finals.append(state.name)
         self.transitions[state.name] = state.transitions
+        for k in state.transitions.keys():
+            if k not in alphabet:
+                self.alphabet.append(k)
 
     def create_state2(self, name, transitions, initial, final):
         if initial is True:
@@ -38,6 +45,9 @@ class Finite_Automata(object):
         if final is True:
             self.finals.append(name)
         self.transitions[name] = transitions
+        for k in state.transitions.keys():
+            if k not in alphabet:
+                self.alphabet.append(k)
 
     def delete_state(self, state):
         states = list(self.transitions.keys())
@@ -46,13 +56,13 @@ class Finite_Automata(object):
             return
         del self.transitions[state.name]
         states = list(self.transitions.keys())
-        for queue in states:
-            keys = list(self.transitions[queue].keys())
+        for q in states:
+            keys = list(self.transitions[q].keys())
             for key in keys:
                 if state.name not in keys:
                     pass
-                if self.transitions[queue][key] is state.name:
-                    del self.transitions[queue][key]
+                if self.transitions[q][key] is state.name:
+                    del self.transitions[q][key]
         if state.name in self.initials:
             self.initials.remove(state.name)
         if state.name in self.finals:
@@ -73,8 +83,8 @@ class Finite_Automata(object):
         if state1.name not in states:
             print("state not found")
             return
-        state1.keys = list(self.transitions[state1.name])
-        if key not in state1.keys:
+        state1_keys = list(self.transitions[state1.name])
+        if key not in state1_keys:
             print("key not found")
             return
         if state2.name is not self.transitions[state1.name][key]:
@@ -84,10 +94,6 @@ class Finite_Automata(object):
         
 
 class State:
-    name = ""
-    transitions = {}
-    initial = False
-    final = False
 
     def __init__(self, name, transitions, initial, final):
         self.name = name
