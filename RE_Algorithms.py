@@ -1,6 +1,9 @@
 alphabet = set()
 non_alphabet = set(['*', '.', '|', '?'])
 
+class node:
+	def __init__(self):
+
 def de_simone(re):
 	# adding . to separate letters
 	dotted = dot_placer(re)
