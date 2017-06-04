@@ -62,6 +62,7 @@ class Finite_Automata(object):
                     pass
                 if self.transitions[q][key] is state.name:
                     del self.transitions[q][key]
+        self.calculate_alphabet()
         if state.name in self.initials:
             self.initials.remove(state.name)
         if state.name in self.finals:
@@ -81,6 +82,7 @@ class Finite_Automata(object):
                     pass
                 if self.transitions[q][key] is name:
                     del self.transitions[q][key]
+        self.calculate_alphabet()
         if name in self.initials:
             self.initials.remove(name)
         if name in self.finals:
@@ -96,7 +98,10 @@ class Finite_Automata(object):
         if state2.name not in self.states:
             self.create_state1(state2)
         self.create_transition_aux(state1.name)
-        self.transitions[state1.name][key] = state2.name
+        if key in self.transitions[state1.name].keys():
+            self.transitions[state1.name][key] += ", "+state2.name
+        else:
+            self.transitions[state1.name][key] = state2.name
         self.calculate_alphabet()
 
     def create_transition2(self, name_state1, name_state2, key):
@@ -105,7 +110,10 @@ class Finite_Automata(object):
         if name_state2 not in self.states:
             self.create_state2(name_state2, False, False)
         self.create_transition_aux(name_state1)
-        self.transitions[name_state1][key] = name_state2
+        if key in self.transitions[name_state1].keys():
+            self.transitions[name_state1][key] += ", "+name_state2
+        else:
+            self.transitions[name_state1][key] = name_state2
         self.calculate_alphabet()
 
     def delete_transition1(self, state1, state2, key):

@@ -60,7 +60,8 @@ def main():
     fa2.create_transition2("S", "A", "a")
     fa2.create_transition2("A", "B", "b")
     fa2.create_transition2("B", "S", "c")
-    
+    fa2.create_transition2("B", "A", "a")
+    fa2.create_transition2("B", "B", "a")
     
     print("fa1")
     print(fa1.states)
@@ -75,7 +76,13 @@ def main():
     print(fa2.initials)
     print(fa2.finals)
 
-   
+    for t in fa2.states:
+        for k in fa2.transitions[t].keys():
+            fa1.create_transition2(t, fa2.transitions[t][k], k)
+
+    print(fa1.transitions)
+
+'''   
     print("\n3")
 
     fa1.create_transition1(estado0, estado3, "b")
@@ -150,5 +157,5 @@ def main():
     print(fa2.transitions)
     print(fa2.initials)
     print(fa2.finals)
-
+'''
 main()
