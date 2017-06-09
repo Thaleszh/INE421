@@ -35,14 +35,29 @@ def minimize(fa):
         for k in self.alphabet not in self.transitions[s].keys():
             fa.create_transition2(s, "Fi", k)
 
-    set_F = set(x for x in fa.finals)
-    set_KF = set(x for x in fa.states not in finals}
+    set_F = [x for x in fa.finals]
+    set_KF = [x for x in fa.states not in finals]
 
     for s in set_F:
+
+
 ############################
 
 def determinize(fa):
-    pass
+    for s in fa.transitions.keys():
+        for k in fa.transitions.[s].keys():
+            state = fa.transitions.[s][k]
+            if state not in fa.states:
+                each_state = state.split(", ")
+                state_final = False
+                for t in each_state:
+                    if t in fa.finals:
+                        state_final = True
+                fa.create_state2(state, False, state_final)
+                for t in each_state:
+                    for a in fa.alphabet:
+                        fa.create_transition2(state, fa.transition[t][a], a)
+
 
 def union(fa1, fa2):
     fa3 = Finite_Automata()
