@@ -35,11 +35,41 @@ def minimize(fa):
         for k in self.alphabet not in self.transitions[s].keys():
             fa.create_transition2(s, "Fi", k)
 
-    set_F = [x for x in fa.finals]
-    set_KF = [x for x in fa.states not in finals]
+    set_F = {x for x in fa.finals}
+    set_KF = {x for x in fa.states not in finals}
 
-    for s in set_F:
+    algorith_sets = [set_F, set_KF]
 
+    change = True
+    while change:
+        aux_algorithms_sets = []
+        change = False
+        for analysis_set in algorithm_sets:
+            equivalence = {}
+            for s in analysis_set:
+                equivalence[s] = {}
+                for a in fa.alphabet:
+                    for x in range(0, len(algorithm_sets))
+                        if fa.transitions[s][a] in algorithm_sets[x]
+                            equivalence[s][a] = x
+            keys = [x for x in analysis_set]
+            equivalent = False
+            while keys != []:
+                analysing = keys.pop()
+                aux_algorithms_sets.append(set(analysing))
+                for k in keys:
+                    for a in fa.alphabet:
+                        if equivalence[analysing][a] == equivalence[k][a]:
+                            equivalent = True
+                        else:
+                            equivalent = False
+                            break
+                    if equivalent:
+                        aux_algortihms_sets[-1].add(k)
+                        keys.remove(k)
+        if aux_algorithms_sets != algorithms_sets:
+            change = True
+        
 
 ############################
 
