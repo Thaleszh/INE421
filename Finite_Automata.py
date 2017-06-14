@@ -3,7 +3,7 @@
 class Finite_Automata(object):
     
     def __init__(self):
-        self.initials = []
+        self.initials = ""
         self.finals = []
         self.transitions = {}
         self.alphabet = [] 
@@ -26,24 +26,24 @@ class Finite_Automata(object):
 
     def add_initial1(state):
         if state.initial:
-            self.initials.append(state.name)
+            self.initials = state.name
 
     def add_final2(name_state):
         self.finals.append(name_state)
 
     def add_initial2(name_state):
-        self.initials.append(name_state)
+        self.initials = name_state
 
     def create_state1(self, state):
         if state.initial:
-            self.initials.append(state.name)
+            self.initials = state.name
         if state.final:
             self.finals.append(state.name)
         self.states.append(state.name)
 
     def create_state2(self, name, initial, final):
         if initial:
-            self.initials.append(name)
+            self.initials = name
         if final:
             self.finals.append(name)
         self.states.append(name)

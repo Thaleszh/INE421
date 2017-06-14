@@ -38,25 +38,25 @@ def minimize(fa):
     set_F = {x for x in fa.finals}
     set_KF = {x for x in fa.states not in finals}
 
-    algorith_sets = [set_F, set_KF]
+    algorithm_sets = [set_F, set_KF]
 
     change = True
     while change:
-        aux_algorithms_sets = []
+        aux_algorithm_sets = []
         change = False
         for analysis_set in algorithm_sets:
             equivalence = {}
             for s in analysis_set:
                 equivalence[s] = {}
                 for a in fa.alphabet:
-                    for x in range(0, len(algorithm_sets))
+                    for x in range(0, len(algorithm_sets-1))
                         if fa.transitions[s][a] in algorithm_sets[x]
                             equivalence[s][a] = x
             keys = [x for x in analysis_set]
             equivalent = False
             while keys != []:
                 analysing = keys.pop()
-                aux_algorithms_sets.append(set(analysing))
+                aux_algorithm_sets.append(set(analysing))
                 for k in keys:
                     for a in fa.alphabet:
                         if equivalence[analysing][a] == equivalence[k][a]:
@@ -65,13 +65,34 @@ def minimize(fa):
                             equivalent = False
                             break
                     if equivalent:
-                        aux_algortihms_sets[-1].add(k)
+                        aux_algortihm_sets[-1].add(k)
                         keys.remove(k)
-        if aux_algorithms_sets != algorithms_sets:
+        if aux_algorithm_sets != algorithm_sets:
             change = True
-        
+            algorithm_sets = aux_algorithm_sets
 
-############################
+    new_initial = ""
+    new_finals = []
+    new_transitions = {}
+
+    FA_Min = Finite_Automata()
+
+    for x in range(0, len(algorithm_sets)-1):
+        FA_Min.create_state2(x, False, False)
+        new_transitions[x] = {}
+        for e in algorithm_sets[x]:
+            if e == fa.initials:
+                new_initial = x
+            if e in fa.finals:
+                new_finals += x
+        for a in fa.alphabet:
+            new_transitions[x][a] = equivalence[e][a]
+
+    FA_Min.initials = new_initial
+    FA_Min.finals = list(set(new_finals))
+    FA_Min.transitions = new_transitions
+
+    return FA_Min
 
 def determinize(fa):
     for s in fa.transitions.keys():
