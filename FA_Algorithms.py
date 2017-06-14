@@ -16,7 +16,6 @@ def minimize(fa):
         if st not in acessiveis:
             fa.delete_state2(st)
 
-
     #verificar estados mortos
     vivos = {x for x in fa.finals}
     aux_vivos = set()
@@ -26,64 +25,82 @@ def minimize(fa):
             for a in fa.transitions[s].keys():
                 if fa.transitions[s][a] in aux_vivos:
                     vivos.add(s)
+
     states = [x for x in fa.states]
     for st in states:
         if st not in vivos:
             fa.delete_state2(st)
 
-'''
+
     #achar estados equivalentes
-    for a in self.alphabet:
-        fa.create_transition2("Fi", "Fi", a)
-    
-    for s in self.states:
-        for k in self.alphabet not in self.transitions[s].keys():
-            fa.create_transition2(s, "Fi", k)
+    states = [x for x in fa.states]
+    alphabet = [x for x in fa.alphabet]
+    for s in states:
+        for k in alphabet:
+            if k not in fa.transitions[s].keys():
+                fa.create_transition2(s, "Fi", k)
+
+    if "Fi" in fa.states:
+        for k in fa.alphabet:
+            fa.create_transition2("Fi", "Fi", k)
 
     set_F = {x for x in fa.finals}
-    set_KF = {x for x in fa.states not in finals}
+    set_KF = set()
+
+    for s in fa.states:
+        if s not in fa.finals:
+            set_KF.add(s)
 
     algorithm_sets = [set_F, set_KF]
+    if set_KF == set():
+        algorithm_sets.remove(set_KF)
+    aux_algorithm_sets = []
+    equivalence = {}
 
-    change = True
-    while change:
-        aux_algorithm_sets = []
-        change = False
-        for analysis_set in algorithm_sets:
-            equivalence = {}
+    while algorithm_sets != aux_algorithm_sets:
+        aux_algorithm_sets = [x for x in algorithm_sets]
+        print('a')
+        print(aux_algorithm_sets)
+        algorithm_sets = []
+        for analysis_set in aux_algorithm_sets:
+            #print('a')
+            print(analysis_set)
             for s in analysis_set:
+                #print('s')
+                #print(s)
                 equivalence[s] = {}
                 for a in fa.alphabet:
-                    for x in range(0, len(algorithm_sets-1)):
-                        if fa.transitions[s][a] in algorithm_sets[x]:
-                            equivalence[s][a] = str(x)
+                    for x in range(0, len(aux_algorithm_sets)-1):
+                        if s in fa.transitions.keys():
+                            if fa.transitions[s][a] in aux_algorithm_sets[x]:
+                                equivalence[s][a] = str(x)
             keys = [x for x in analysis_set]
             equivalent = False
             while keys != []:
                 analysing = keys.pop()
-                aux_algorithm_sets.append(set(analysing))
+                algorithm_sets.append(set(analysing))
                 for k in keys:
                     for a in fa.alphabet:
-                        if equivalence[analysing][a] == equivalence[k][a]:
-                            equivalent = True
-                        else:
-                            equivalent = False
-                            break
+                        if a in equivalence[analysing].keys():
+                            if a in equivalence[k].keys():
+                                if equivalence[analysing][a] == equivalence[k][a]:
+                                    equivalent = True
+                                else:
+                                    equivalent = False
+                                    break
                     if equivalent:
-                        aux_algortihm_sets[-1].add(k)
+                        algorithm_sets[-1].add(k)
                         keys.remove(k)
-        if aux_algorithm_sets != algorithm_sets:
-            change = True
-            algorithm_sets = aux_algorithm_sets
-
+    
+    print('e')
+    print(equivalence)
     new_initial = ""
     new_finals = []
     new_transitions = {}
-
-    FA_Min = Finite_Automata()
+    new_states = []
 
     for x in range(0, len(algorithm_sets)-1):
-        FA_Min.create_state2(str(x), False, False)
+        new_states.append(str(x))
         new_transitions[str(x)] = {}
         for e in algorithm_sets[x]:
             if e == fa.initials:
@@ -91,14 +108,14 @@ def minimize(fa):
             if e in fa.finals:
                 new_finals += str(x)
         for a in fa.alphabet:
-            new_transitions[str(x)][a] = equivalence[e][a]
+            if e in equivalence.keys():
+                new_transitions[str(x)][a] = equivalence[e][a]
 
-    FA_Min.initials = new_initial
-    FA_Min.finals = list(set(new_finals))
-    FA_Min.transitions = new_transitions
+    fa.initials = new_initial
+    fa.finals = list(set(new_finals))
+    fa.transitions = new_transitions
+    fa.states = new_states
 
-    return FA_Min
-'''
 
 def determinize(fa):
     change = True
@@ -113,15 +130,15 @@ def determinize(fa):
                     each_state = st.split(", ")
                     for e in each_state:
                         if e in fa.finals and st not in fa.finals:
-                            fa.add_finals(st)
+                            fa.add_final2(st)
                         if e in fa.transitions.keys():
                             for a in fa.alphabet:
                                 if a in fa.transitions[e].keys():
                                     fa.create_transition2(st, fa.transitions[e][a], a)
         if len(states) != len(fa.transitions.keys()):
             change = True
-
-#verificar estados acessiveis
+    
+    #verificar estados acessiveis
     acessiveis = set()
     acessiveis.add(fa.initials)
     aux_acessiveis = set()
@@ -131,9 +148,24 @@ def determinize(fa):
             for a in fa.transitions[s].keys():
                 acessiveis.add(fa.transitions[s][a])
 
-    acessiveis = list(acessiveis)
-    for st in fa.states:
+    states = [x for x in fa.states]
+    for st in states:
         if st not in acessiveis:
+            fa.delete_state2(st)
+
+    #verificar estados mortos
+    vivos = {x for x in fa.finals}
+    aux_vivos = set()
+    while vivos != aux_vivos:
+        aux_vivos = {x for x in vivos}
+        for s in fa.states:
+            for a in fa.transitions[s].keys():
+                if fa.transitions[s][a] in aux_vivos:
+                    vivos.add(s)
+
+    states = [x for x in fa.states]
+    for st in states:
+        if st not in vivos:
             fa.delete_state2(st)
 
 

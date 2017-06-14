@@ -3,30 +3,52 @@ from Finite_Automata import Finite_Automata, State
 
 def main():
 
+    
+    
     fa_not_min = Finite_Automata()
-    fa_not_min.create_state2("S", True, False)
+    fa_not_min.create_state2("S", True, True)
     fa_not_min.create_state2("A", False, False)
     fa_not_min.create_state2("B", False, True)
-    fa_not_min.create_state2("M1", False, False)
-    fa_not_min.create_state2("M2", False, False)
+    fa_not_min.create_state2("C", False, True)
+    fa_not_min.create_state2("D", False, False)
 
-    fa_not_min.create_transition2("S", "S", '0')
-    fa_not_min.create_transition2("S", "A", '1')
-    fa_not_min.create_transition2("A", "B", '0')
-    fa_not_min.create_transition2("A", "B", '1')
-    fa_not_min.create_transition2("M1", "M1", '0')
-    fa_not_min.create_transition2("M1", "M1", '1')
-    fa_not_min.create_transition2("B", "B", '0')
-    fa_not_min.create_transition2("B", "M2", '1')
-    fa_not_min.create_transition2("M2", "M2", '0')
-    fa_not_min.create_transition2("M2", "M2", '1')
+    fa_not_min.create_transition2("S", "B", 'a')
+    fa_not_min.create_transition2("S", "D", 'a')
+    fa_not_min.create_transition2("S", "A", 'b')
+    fa_not_min.create_transition2("S", "C", 'b')
+    fa_not_min.create_transition2("A", "B", 'a')
+    fa_not_min.create_transition2("A", "A", 'b')
+    fa_not_min.create_transition2("B", "A", 'a')
+    fa_not_min.create_transition2("B", "B", 'b')
+    fa_not_min.create_transition2("C", "D", 'a')
+    fa_not_min.create_transition2("C", "C", 'b')
+    fa_not_min.create_transition2("D", "C", 'a')
+    fa_not_min.create_transition2("D", "D", 'b')
 
+    print('1')
+    print(fa_not_min.alphabet)
+    print(fa_not_min.states)
     print(fa_not_min.transitions)
+    print('\n')
+    
+    determinize(fa_not_min)
+
+    print('2')
+    print(fa_not_min.alphabet)
+    print(fa_not_min.states)
+    print(fa_not_min.transitions)
+    print('\n')
 
     minimize(fa_not_min)
 
+    print('3')
     print(fa_not_min.transitions)
-    
+    print(fa_not_min.states)
+    print(fa_not_min.finals)
+    print(fa_not_min.initials)
+    print('\n')
+
+
 '''
     fa_no_determinize = Finite_Automata()
     fa_no_determinize.create_state2("S", True, False)
