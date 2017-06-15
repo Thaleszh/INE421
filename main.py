@@ -1,10 +1,98 @@
-from FA_Algorithms import determinize, minimize
+from FA_Algorithms import determinize, minimize, complement, union
 from Finite_Automata import Finite_Automata, State
 import pdb
 
 
 def main():
+    
+    fa_div_3 = Finite_Automata()
+    fa_div_3.create_state2("0", True, True)
+    fa_div_3.create_state2("1", False, False)
+    fa_div_3.create_state2("2", False, False)
 
+    fa_div_3.create_transition2("0", "0", '0')
+    fa_div_3.create_transition2("0", "1", '1')
+    fa_div_3.create_transition2("1", "2", '0')
+    fa_div_3.create_transition2("1", "0", '1')
+    fa_div_3.create_transition2("2", "1", '0')
+    fa_div_3.create_transition2("2", "2", '1')
+
+    fa_div_2 = Finite_Automata()
+    fa_div_2.create_state2("3", True, True)
+    fa_div_2.create_state2("4", False, False)
+
+    fa_div_2.create_transition2("3", "3", '0')
+    fa_div_2.create_transition2("3", "4", '1')
+    fa_div_2.create_transition2("4", "3", '0')
+    fa_div_2.create_transition2("4", "4", '1')
+
+    print('div3')
+    print(fa_div_3.states)
+    print(fa_div_3.finals)
+    print(fa_div_3.initials)
+    print(fa_div_3.transitions)
+
+    print('div2')
+    print(fa_div_2.states)
+    print(fa_div_2.finals)
+    print(fa_div_2.initials)
+    print(fa_div_2.transitions)
+    
+    union_fa = union(fa_div_2, fa_div_3) 
+    
+    print('union')
+    print(union_fa.states)
+    print(union_fa.finals)
+    print(union_fa.initials)
+    print(union_fa.transitions)
+'''    
+    fa_div_3 = Finite_Automata()
+    fa_div_3.create_state2("0", True, True)
+    fa_div_3.create_state2("1", False, False)
+    fa_div_3.create_state2("2", False, False)
+
+    fa_div_3.create_transition2("0", "0", '0')
+    fa_div_3.create_transition2("0", "1", '1')
+    fa_div_3.create_transition2("1", "2", '0')
+    fa_div_3.create_transition2("1", "0", '1')
+    fa_div_3.create_transition2("2", "1", '0')
+    fa_div_3.create_transition2("2", "2", '1')
+
+    print(fa_div_3.states)
+    print(fa_div_3.finals)
+    print(fa_div_3.initials)
+    print(fa_div_3.transitions)
+
+    fa_not_div_3 = complement(fa_div_3)
+
+    print(fa_not_div_3.states)
+    print(fa_not_div_3.finals)
+    print(fa_not_div_3.initials)
+    print(fa_not_div_3.transitions)
+'''
+'''   
+    fa_no_determinize = Finite_Automata()
+    fa_no_determinize.create_state2("S", True, False)
+    fa_no_determinize.create_state2("A", False, False)
+    fa_no_determinize.create_state2("B", False, True)
+
+    fa_no_determinize.create_transition2("S", "S", '0')
+    fa_no_determinize.create_transition2("S", "S", '1')
+    fa_no_determinize.create_transition2("S", "A", '1')
+    fa_no_determinize.create_transition2("A", "B", '0')
+    fa_no_determinize.create_transition2("A", "B", '1')
+
+    print(fa_no_determinize.transitions)
+
+    determinize(fa_no_determinize)
+    
+    print(fa_no_determinize.states)
+    print(fa_no_determinize.finals)
+    print(fa_no_determinize.initials)
+    print(fa_no_determinize.transitions)
+    
+'''
+'''
     fa_not_min = Finite_Automata()
     fa_not_min.create_state2("I", True, True)
     fa_not_min.create_state2("S", False, True)
@@ -61,7 +149,7 @@ def main():
     print(fa_not_min.finals)
     print(fa_not_min.initials)
     print('\n')
-
+'''
 '''
     fa_not_min = Finite_Automata()
     fa_not_min.create_state2("S", True, True)
@@ -113,29 +201,6 @@ def main():
     print('\n')
 
 
-'''
-'''
-    fa_no_determinize = Finite_Automata()
-    fa_no_determinize.create_state2("S", True, False)
-    fa_no_determinize.create_state2("A", False, False)
-    fa_no_determinize.create_state2("B", False, True)
-
-    fa_no_determinize.create_transition2("S", "S", '0')
-    fa_no_determinize.create_transition2("S", "S", '1')
-    fa_no_determinize.create_transition2("S", "A", '1')
-    fa_no_determinize.create_transition2("A", "B", '0')
-    fa_no_determinize.create_transition2("A", "B", '1')
-
-    print(fa_no_determinize.transitions)
-
-    determinize(fa_no_determinize)
-    
-    print(fa_no_determinize.states)
-    print(fa_no_determinize.finals)
-    print(fa_no_determinize.initials)
-    print(fa_no_determinize.transitions)
-    
- 
 '''
 '''   
     final = True

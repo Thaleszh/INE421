@@ -79,12 +79,10 @@ class Finite_Automata(object):
         for q in states:
             keys = list(self.transitions[q].keys())
             for key in keys:
-                if name not in keys:
-                    pass
                 if self.transitions[q][key] is name:
                     del self.transitions[q][key]
         self.calculate_alphabet()
-        if name in self.initials:
+        if name == self.initials:
             self.initials = ""
         if name in self.finals:
             self.finals.remove(name)
@@ -112,7 +110,8 @@ class Finite_Automata(object):
             self.create_state2(name_state2, False, False)
         self.create_transition_aux(name_state1)
         if key in self.transitions[name_state1].keys():
-            if self.transitions[name_state1][key] != name_state2:
+            split = self.transitions[name_state1][key].split(', ')
+            if name_state2 not in split:
                 self.transitions[name_state1][key] += ", "+name_state2
         else:
             self.transitions[name_state1][key] = name_state2

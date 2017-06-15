@@ -1,4 +1,4 @@
-import Finite_Automata
+from Finite_Automata import Finite_Automata
 import pdb
 
 def minimize(fa):
@@ -128,23 +128,31 @@ def minimize(fa):
 
 def determinize(fa):
     states = []
-#    while len(states) != len(fa.transitions.keys()):
-    states = [x for x in fa.transitions.keys()]
-    for s in states:
-        for k in fa.transitions[s].keys():
-            st = fa.transitions[s][k]
-            if st not in fa.states:
-                fa.create_state2(st, False, False)
-                each_state = st.split(", ")
-                for e in each_state:
-                    if e in fa.finals and st not in fa.finals:
-                        fa.add_final2(st)
-                    if e in fa.transitions.keys():
-                        for a in fa.alphabet:
-                            if a in fa.transitions[e].keys():
-                                fa.create_transition2(st, fa.transitions[e][a], a)
-    
+    while len(states) != len(fa.transitions.keys()):
+        states = [x for x in fa.transitions.keys()]
+        #print(states)
+        #print(fa.transitions)
+        for s in states:
+            #print(s)
+            for k in fa.transitions[s].keys():
+                #print(k)
+                st = fa.transitions[s][k]
+                #print(st)
+                if st not in fa.states:
+                    fa.create_state2(st, False, False)
+                    each_state = st.split(", ")
+                    #print(each_state)
+                    for e in each_state:
+                        if e in fa.finals and st not in fa.finals:
+                            fa.add_final2(st)
+                        if e in fa.transitions.keys():
+                            #print(fa.transitions[e])
+                            for a in fa.alphabet:
+                                if a in fa.transitions[e].keys():
+                                    fa.create_transition2(st, fa.transitions[e][a], a)
+                                    #print(fa.transitions[st]) 
     #verificar estados acessiveis
+    #pdb.set_trace()
     acessiveis = set()
     acessiveis.add(fa.initials)
     aux_acessiveis = set()
@@ -158,7 +166,7 @@ def determinize(fa):
     for st in states:
         if st not in acessiveis:
             fa.delete_state2(st)
-    
+
     #verificar estados mortos
     vivos = {x for x in fa.finals}
     aux_vivos = set()
@@ -173,7 +181,7 @@ def determinize(fa):
     for st in states:
         if st not in vivos:
             fa.delete_state2(st)
-
+    
 
 def union(fa1, fa2):
     fa3 = Finite_Automata()
@@ -181,26 +189,25 @@ def union(fa1, fa2):
     fa3.alphabet = fa1.alphabet + fa2.alphabet
     fa3.states = fa1.states + fa2.states
     fa3.finals = fa1.finals + fa2.finals
-
+    
     new_initial_final = False
 
-    if fa1.initials[0] in fa1.finals:
+    if fa1.initials in fa1.finals:
         new_initial_final = True
-    if fa2.initials[0] in fa2.finals:
+    if fa2.initials in fa2.finals:
         new_initial_final = True
 
-    fa3.create_state2(fa1.initials[0]+", "+fa2.initials[0],
+    fa3.create_state2(fa1.initials+", "+fa2.initials,
                       True, new_initial_final)
     
-    for k in fa1.transitions[fa1.initials[0]].keys():
-        fa3.create_transition(fa3.initials[0], 
-                              fa1.transitions[fa1.initials[0]][k],
-                              [k])
-    for k in fa2.transitions[fa2.initials[0]].keys():
-        fa3.create_transition(fa3.initials[0], 
-                              fa2.transitions[fa2.initials[0]][k],
-                              [k])
-
+    for k in fa1.transitions[fa1.initials].keys():
+        fa3.create_transition2(fa3.initials, 
+                              fa1.transitions[fa1.initials][k],
+                              k)
+    for k in fa2.transitions[fa2.initials].keys():
+        fa3.create_transition2(fa3.initials, 
+                              fa2.transitions[fa2.initials][k],
+                              k)
     for s in fa1.states:
         for k in fa1.transitions[s].keys():
             fa3.create_transition2(s,fa1.transitions[s][k], k)
@@ -213,10 +220,19 @@ def union(fa1, fa2):
     return(fa3)
 
 def complement(fa1):
-    fa2 = Finite_Automata([])
-    fa2.initials = fa1.finals
-    fa2.finals = fa1.initials
-    fa2.transitions = fa1.transitions
+    fa2 = Finite_Automata()
+    
+    for s in fa1.states:
+        fa2.create_state2(s, False, False)
+        if s not in fa1.finals:
+            fa2.finals.append(s)
+    
+    fa2.initials = fa1.initials
+
+    for k in fa1.transitions.keys():
+        fa2.transitions[k] = {}
+        for a in fa1.alphabet:
+            fa2.transitions[k][a] = fa1.transitions[k][a]
     return fa2
 
 def intersection(fa1, fa2):
