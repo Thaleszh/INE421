@@ -18,20 +18,20 @@ class Finite_Automata(object):
             for k in self.transitions[q].keys():
                 if k not in new_alphabet:
                     new_alphabet.append(k)
-        self.alphabet = new_alphabet
+        self.alphabet = [x for x in new_alphabet]
 
-    def add_final1(state):
+    def add_final1(self, state):
         if state.final:
             self.finals.append(state.name)
 
-    def add_initial1(state):
+    def add_initial1(self, state):
         if state.initial:
             self.initials = state.name
 
-    def add_final2(name_state):
+    def add_final2(self, name_state):
         self.finals.append(name_state)
 
-    def add_initial2(name_state):
+    def add_initial2(self, name_state):
         self.initials = name_state
 
     def create_state1(self, state):
@@ -64,7 +64,7 @@ class Finite_Automata(object):
                     del self.transitions[q][key]
         self.calculate_alphabet()
         if state.name in self.initials:
-            self.initials.remove(state.name)
+            self.initials = ""
         if state.name in self.finals:
             self.finals.remove(state.name)
 
@@ -73,7 +73,8 @@ class Finite_Automata(object):
             print("state not found")
             return
         self.states.remove(name)
-        del self.transitions[name]
+        if name in self.transitions.keys():
+            del self.transitions[name]
         states = list(self.transitions.keys())
         for q in states:
             keys = list(self.transitions[q].keys())
@@ -84,7 +85,7 @@ class Finite_Automata(object):
                     del self.transitions[q][key]
         self.calculate_alphabet()
         if name in self.initials:
-            self.initials.remove(name)
+            self.initials = ""
         if name in self.finals:
             self.finals.remove(name)
 
@@ -111,10 +112,13 @@ class Finite_Automata(object):
             self.create_state2(name_state2, False, False)
         self.create_transition_aux(name_state1)
         if key in self.transitions[name_state1].keys():
-            self.transitions[name_state1][key] += ", "+name_state2
+            if self.transitions[name_state1][key] != name_state2:
+                self.transitions[name_state1][key] += ", "+name_state2
         else:
             self.transitions[name_state1][key] = name_state2
-        self.calculate_alphabet()
+        if key not in self.alphabet:
+            self.alphabet.append(key)
+#        self.calculate_alphabet()
 
     def delete_transition1(self, state1, state2, key):
         if state1.name not in self.states:

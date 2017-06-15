@@ -1,33 +1,47 @@
 from FA_Algorithms import determinize, minimize
 from Finite_Automata import Finite_Automata, State
+import pdb
+
 
 def main():
 
-    
-    
     fa_not_min = Finite_Automata()
-    fa_not_min.create_state2("S", True, True)
+    fa_not_min.create_state2("I", True, True)
+    fa_not_min.create_state2("S", False, True)
     fa_not_min.create_state2("A", False, False)
-    fa_not_min.create_state2("B", False, True)
-    fa_not_min.create_state2("C", False, True)
-    fa_not_min.create_state2("D", False, False)
+    fa_not_min.create_state2("C", False, False)
+    fa_not_min.create_state2("D", False, True)
+    fa_not_min.create_state2("E", False, True)
 
-    fa_not_min.create_transition2("S", "B", 'a')
-    fa_not_min.create_transition2("S", "D", 'a')
+    fa_not_min.create_transition2("I", "A", 'a')
+    fa_not_min.create_transition2("I", "A", 'b')
+    fa_not_min.create_transition2("I", "C", 'b')
+    fa_not_min.create_transition2("I", "C", 'c')
+
+    fa_not_min.create_transition2("S", "A", 'a')
     fa_not_min.create_transition2("S", "A", 'b')
     fa_not_min.create_transition2("S", "C", 'b')
-    fa_not_min.create_transition2("A", "B", 'a')
-    fa_not_min.create_transition2("A", "A", 'b')
-    fa_not_min.create_transition2("B", "A", 'a')
-    fa_not_min.create_transition2("B", "B", 'b')
-    fa_not_min.create_transition2("C", "D", 'a')
-    fa_not_min.create_transition2("C", "C", 'b')
-    fa_not_min.create_transition2("D", "C", 'a')
-    fa_not_min.create_transition2("D", "D", 'b')
+    fa_not_min.create_transition2("S", "C", 'c')
 
+    fa_not_min.create_transition2("A", "S", 'b')
+    fa_not_min.create_transition2("A", "D", 'c')
+    
+    fa_not_min.create_transition2("C", "E", 'a')
+    fa_not_min.create_transition2("C", "S", 'b')
+    
+    fa_not_min.create_transition2("D", "A", 'a')
+    fa_not_min.create_transition2("D", "A", 'b')
+    fa_not_min.create_transition2("D", "C", 'b')
+
+    fa_not_min.create_transition2("E", "A", 'b')
+    fa_not_min.create_transition2("E", "C", 'b')
+    fa_not_min.create_transition2("E", "C", 'c')
+    
     print('1')
     print(fa_not_min.alphabet)
     print(fa_not_min.states)
+    print(fa_not_min.finals)
+    print(fa_not_min.initials)
     print(fa_not_min.transitions)
     print('\n')
     
@@ -40,7 +54,57 @@ def main():
     print('\n')
 
     minimize(fa_not_min)
+    
+    print('3')
+    print(fa_not_min.transitions)
+    print(fa_not_min.states)
+    print(fa_not_min.finals)
+    print(fa_not_min.initials)
+    print('\n')
 
+'''
+    fa_not_min = Finite_Automata()
+    fa_not_min.create_state2("S", True, True)
+    fa_not_min.create_state2("A", False, False)
+    fa_not_min.create_state2("B", False, True)
+    fa_not_min.create_state2("C", False, True)
+    fa_not_min.create_state2("D", False, False)
+
+    fa_not_min.create_transition2("S", "B", 'a')
+    fa_not_min.create_transition2("S", "D", 'a')
+    fa_not_min.create_transition2("S", "A", 'b')
+    fa_not_min.create_transition2("S", "C", 'b')
+
+    fa_not_min.create_transition2("A", "B", 'a')
+    fa_not_min.create_transition2("A", "A", 'b')
+    
+    fa_not_min.create_transition2("B", "A", 'a')
+    fa_not_min.create_transition2("B", "B", 'b')
+    
+    fa_not_min.create_transition2("C", "D", 'a')
+    fa_not_min.create_transition2("C", "C", 'b')
+    
+    fa_not_min.create_transition2("D", "C", 'a')
+    fa_not_min.create_transition2("D", "D", 'b')
+
+    print('1')
+    print(fa_not_min.alphabet)
+    print(fa_not_min.states)
+    print(fa_not_min.finals)
+    print(fa_not_min.initials)
+    print(fa_not_min.transitions)
+    print('\n')
+    
+    determinize(fa_not_min)
+
+    print('2')
+    print(fa_not_min.alphabet)
+    print(fa_not_min.states)
+    print(fa_not_min.transitions)
+    print('\n')
+
+    minimize(fa_not_min)
+    
     print('3')
     print(fa_not_min.transitions)
     print(fa_not_min.states)
@@ -50,10 +114,11 @@ def main():
 
 
 '''
+'''
     fa_no_determinize = Finite_Automata()
     fa_no_determinize.create_state2("S", True, False)
     fa_no_determinize.create_state2("A", False, False)
-    fa_no_determinize.create_state2("B", False, False)
+    fa_no_determinize.create_state2("B", False, True)
 
     fa_no_determinize.create_transition2("S", "S", '0')
     fa_no_determinize.create_transition2("S", "S", '1')
@@ -64,11 +129,14 @@ def main():
     print(fa_no_determinize.transitions)
 
     determinize(fa_no_determinize)
-    fa_determinize = fa_no_determinize 
-
-    print(fa_determinize.transitions)
-''' 
     
+    print(fa_no_determinize.states)
+    print(fa_no_determinize.finals)
+    print(fa_no_determinize.initials)
+    print(fa_no_determinize.transitions)
+    
+ 
+'''
 '''   
     final = True
     inicial = True

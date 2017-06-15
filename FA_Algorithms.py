@@ -1,4 +1,5 @@
 import Finite_Automata
+import pdb
 
 def minimize(fa):
     #verificar estados acessiveis
@@ -59,27 +60,37 @@ def minimize(fa):
 
     while algorithm_sets != aux_algorithm_sets:
         aux_algorithm_sets = [x for x in algorithm_sets]
-        print('a')
-        print(aux_algorithm_sets)
+        #print(aux_algorithm_sets)
         algorithm_sets = []
         for analysis_set in aux_algorithm_sets:
-            #print('a')
-            print(analysis_set)
+            #print(analysis_set)
             for s in analysis_set:
-                #print('s')
                 #print(s)
                 equivalence[s] = {}
+                #print(equivalence)
                 for a in fa.alphabet:
-                    for x in range(0, len(aux_algorithm_sets)-1):
+                    for x in range(0, len(aux_algorithm_sets)):
                         if s in fa.transitions.keys():
                             if fa.transitions[s][a] in aux_algorithm_sets[x]:
                                 equivalence[s][a] = str(x)
+            #print(equivalence)
             keys = [x for x in analysis_set]
+            aux_keys = [x for x in analysis_set]
+            #print(keys)
             equivalent = False
             while keys != []:
                 analysing = keys.pop()
-                algorithm_sets.append(set(analysing))
-                for k in keys:
+                #print(analysing)
+                #print(keys)
+                algorithm_sets.append(set())
+                algorithm_sets[-1].add(analysing)
+                #print(algorithm_sets)
+                for k in aux_keys:
+                    if k not in keys:
+                        break
+                    #print(k)
+                    #print(aux_keys)
+                    #print(keys)
                     for a in fa.alphabet:
                         if a in equivalence[analysing].keys():
                             if a in equivalence[k].keys():
@@ -91,15 +102,14 @@ def minimize(fa):
                     if equivalent:
                         algorithm_sets[-1].add(k)
                         keys.remove(k)
-    
-    print('e')
-    print(equivalence)
+                        #print(algorithm_sets)
+        #print(algorithm_sets)
     new_initial = ""
     new_finals = []
     new_transitions = {}
     new_states = []
 
-    for x in range(0, len(algorithm_sets)-1):
+    for x in range(0, len(algorithm_sets)):
         new_states.append(str(x))
         new_transitions[str(x)] = {}
         for e in algorithm_sets[x]:
@@ -110,7 +120,6 @@ def minimize(fa):
         for a in fa.alphabet:
             if e in equivalence.keys():
                 new_transitions[str(x)][a] = equivalence[e][a]
-
     fa.initials = new_initial
     fa.finals = list(set(new_finals))
     fa.transitions = new_transitions
@@ -118,25 +127,22 @@ def minimize(fa):
 
 
 def determinize(fa):
-    change = True
-    while change:
-        change = False
-        states = [x for x in fa.transitions.keys()]
-        for s in states:
-            for k in fa.transitions[s].keys():
-                st = fa.transitions[s][k]
-                if st not in fa.states:
-                    fa.create_state2(st, False, False)
-                    each_state = st.split(", ")
-                    for e in each_state:
-                        if e in fa.finals and st not in fa.finals:
-                            fa.add_final2(st)
-                        if e in fa.transitions.keys():
-                            for a in fa.alphabet:
-                                if a in fa.transitions[e].keys():
-                                    fa.create_transition2(st, fa.transitions[e][a], a)
-        if len(states) != len(fa.transitions.keys()):
-            change = True
+    states = []
+#    while len(states) != len(fa.transitions.keys()):
+    states = [x for x in fa.transitions.keys()]
+    for s in states:
+        for k in fa.transitions[s].keys():
+            st = fa.transitions[s][k]
+            if st not in fa.states:
+                fa.create_state2(st, False, False)
+                each_state = st.split(", ")
+                for e in each_state:
+                    if e in fa.finals and st not in fa.finals:
+                        fa.add_final2(st)
+                    if e in fa.transitions.keys():
+                        for a in fa.alphabet:
+                            if a in fa.transitions[e].keys():
+                                fa.create_transition2(st, fa.transitions[e][a], a)
     
     #verificar estados acessiveis
     acessiveis = set()
@@ -147,12 +153,12 @@ def determinize(fa):
         for s in aux_acessiveis:
             for a in fa.transitions[s].keys():
                 acessiveis.add(fa.transitions[s][a])
-
+    
     states = [x for x in fa.states]
     for st in states:
         if st not in acessiveis:
             fa.delete_state2(st)
-
+    
     #verificar estados mortos
     vivos = {x for x in fa.finals}
     aux_vivos = set()
@@ -162,7 +168,7 @@ def determinize(fa):
             for a in fa.transitions[s].keys():
                 if fa.transitions[s][a] in aux_vivos:
                     vivos.add(s)
-
+    
     states = [x for x in fa.states]
     for st in states:
         if st not in vivos:
