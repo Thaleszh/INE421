@@ -137,6 +137,45 @@ def minimize(fa):
     fa.states = new_states
 
 
+def epsilon_aux(fa):
+    states = fa.transitions.keys()
+    for state in states:
+        #calcular epsilon fecho
+        o_state = fa.transitions[state]['&']
+        epsilon_f = state+", "+o_state
+        epsilon_f_split = epsilon_f.split(", ")
+        fa.create_state(epsilon_f, False, False)
+        for st in epsilon_f_split:
+            if st in fa.finals:
+                fa.add_final(epsilon_f)
+                break
+        if fa.initials == state:
+            fa.initials == epsilon_f
+        #atualizar transicoes
+        for k in fa.transitions.keys():
+            for a in fa. transitions[k].keys():
+                if fa.transitions[k][a] == state:
+                    fa.delete_trasition(k, state, a)
+                    fa.create_transition(k, epsilon_f, a)
+        for s in epsilon_f_split:
+            for a in fa.transitions[s].keys():
+                st_trans = fa.transitions[s][a]
+                fa.create_transition(epsilon_f, st_trans, a)
+
+    #deletar transicoes por epsilon
+    for k in fa.transitions.keys():
+        st_epsilon = fa.transitions[k]['&']
+        fa.delete_transition(k, st_epsilon, '&')
+                
+
+def determinize_epsilon(fa):
+    if '&' not in fa.alphabet:
+        determinize(fa)
+        return
+    
+    #calcule o epsilon fecho e atualizar estados
+    epsilon_aux(fa)
+
 def determinize(fa):
     states = []
     #loop de determinizacao
