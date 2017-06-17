@@ -1,10 +1,40 @@
 from FA_Algorithms import determinize, minimize, complement, union
-from Finite_Automata import Finite_Automata, State
+from FA_Algorithms import determinize_epsilon
+from Finite_Automata import Finite_Automata
 import pdb
 
 
 def main():
+    fa_epsilon = Finite_Automata()
+    fa_epsilon.create_state("0", True, False)
+    fa_epsilon.create_state("1", False, False)
+    fa_epsilon.create_state("2", False, True)
+
+    fa_epsilon.create_transition("0", "0", 'a')
+    fa_epsilon.create_transition("0", "1", 'b')
+    fa_epsilon.create_transition("0", "1", '&')
+    fa_epsilon.create_transition("1", "1", 'a')
+    fa_epsilon.create_transition("1", "2", 'b')
+    fa_epsilon.create_transition("1", "2", '&')
+    fa_epsilon.create_transition("2", "2", 'a')
+    fa_epsilon.create_transition("2", "2", 'b')
     
+    print('epsilon')
+    print(fa_epsilon.alphabet)
+    print(fa_epsilon.states)
+    print(fa_epsilon.finals)
+    print(fa_epsilon.initials)
+    print(fa_epsilon.transitions)
+
+    determinize_epsilon(fa_epsilon)
+
+    print('nao-epsilon')
+    print(fa_epsilon.alphabet)
+    print(fa_epsilon.states)
+    print(fa_epsilon.finals)
+    print(fa_epsilon.initials)
+    print(fa_epsilon.transitions)
+'''    
     fa_div_3 = Finite_Automata()
     fa_div_3.create_state("0", True, True)
     fa_div_3.create_state("1", False, False)
@@ -45,6 +75,7 @@ def main():
     print(union_fa.finals)
     print(union_fa.initials)
     print(union_fa.transitions)
+'''
 '''    
     fa_div_3 = Finite_Automata()
     fa_div_3.create_state("0", True, True)
