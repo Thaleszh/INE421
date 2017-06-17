@@ -3,6 +3,7 @@
 class Finite_Automata(object):
     
     def __init__(self):
+        self.name = ""
         self.initials = ""
         self.finals = []
         self.transitions = {}
@@ -12,6 +13,9 @@ class Finite_Automata(object):
         #	Example state: 
         #	q0 = [[a : q2, b : q3], false, true]
    
+    def set_name(self, name):
+        self.name = name
+
     def calculate_alphabet(self):
         new_alphabet = []
         for q in self.transitions.keys():
