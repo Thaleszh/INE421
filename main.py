@@ -1,7 +1,7 @@
 from FA_Algorithms import determinize, minimize, complement, union
 from FA_Algorithms import determinize_epsilon
 from Finite_Automata import Finite_Automata
-import pdb
+#import pdb
 
 
 def main():
@@ -15,7 +15,7 @@ def main():
     fa_epsilon.create_transition("0", "1", '&')
     fa_epsilon.create_transition("1", "1", 'a')
     fa_epsilon.create_transition("1", "2", 'b')
-    fa_epsilon.create_transition("1", "2", '&')
+    #fa_epsilon.create_transition("1", "2", '&')
     fa_epsilon.create_transition("2", "2", 'a')
     fa_epsilon.create_transition("2", "2", 'b')
     

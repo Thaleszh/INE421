@@ -1,5 +1,5 @@
 from Finite_Automata import Finite_Automata
-import pdb
+#import pdb
 
 def remove_unacess(fa):
     #verificar estados acessiveis
@@ -191,6 +191,7 @@ def determinize_epsilon(fa):
     
     #calcule o epsilon fecho e atualizar estados
     epsilon_aux(fa)
+    determinize(fa)
     remove_unacess(fa)
     remove_dead(fa)
 
