@@ -27,11 +27,12 @@ class Finite_Automata(object):
         self.initials = name_state
 
     def create_state(self, name, initial, final):
-        if initial:
-            self.initials = name
-        if final:
-            self.finals.append(name)
-        self.states.append(name)
+        if name not in self.states:
+            if initial:
+                self.initials = name
+            if final:
+                self.finals.append(name)
+            self.states.append(name)
 
     def delete_state(self, name):
         if name not in self.states:
