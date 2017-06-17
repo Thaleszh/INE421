@@ -63,9 +63,9 @@ class Finite_Automata(object):
 
     def create_transition(self, name_state1, name_state2, key):
         if name_state1 not in self.states:
-            self.create_state2(name_state1, False, False)
+            self.create_state(name_state1, False, False)
         if name_state2 not in self.states:
-            self.create_state2(name_state2, False, False)
+            self.create_state(name_state2, False, False)
         self.create_transition_aux(name_state1)
         if key in self.transitions[name_state1].keys():
             split = self.transitions[name_state1][key].split(', ')
