@@ -3,70 +3,68 @@ from PyQt5.QtWidgets import (QMainWindow, QLabel, QWidget, QAction, qApp,
     QApplication, QLineEdit, QInputDialog, QGridLayout, QPushButton)
 from PyQt5.QtGui import QIcon
 from Finite_Automata import Finite_Automata
-import FA_algorithms
+import FA_Algorithms
 
 class main_window(QMainWindow):
     
     def __init__(self):
         self.FA_list = []
         self.RE_list = []
-        print(self.FA_list)
         super().__init__()
         self.initUI()
         
         
-    def initUI(self):               
+    def initUI(self):
+
+        grid = QGridLayout()
+        grid.setSpacing(5)
+
+
         #buttons
         createSb = QPushButton('Create State', self)
-        createSb.move(200, 200)
-        createSb.clicked.connect(self.create_state_button)
+        createSb.clicked.connect(self.create_state_event)
 
         createTb = QPushButton('Create Transition', self)
-        createTb.move(200, 230)
-        createTbb.clicked.connect(self.create_transition_button)
+        createTb.clicked.connect(self.create_transition_event)
 
         deleteSb = QPushButton('Delete State', self)
-        deleteSb.move(200, 260)
-        deleteSb.clicked.connect(self.delete_state_button)
+        deleteSb.clicked.connect(self.delete_state_event)
 
         deleteTb = QPushButton('Delete Transition', self)
-        deleteTb.move(200, 290)
-        deleteTb.clicked.connect(self.delete_transition_button)
+        deleteTb.clicked.connect(self.delete_transition_event)
 
         unionb = QPushButton('Union', self)
-        unionb.move(10, 60)
-        unionb.clicked.connect(self.union_button)
+        unionb.clicked.connect(self.union_event)
 
         complementb = QPushButton('Complement', self)
-        complementb.move(10, 110)
-        complementb.clicked.connect(self.complement_button)
+        complementb.clicked.connect(self.complement_event)
 
         intersectionb = QPushButton('Intersection', self)
-        intersectionb.move(10, 160)
-        intersectionb.clicked.connect(self.intersection_button)
+        intersectionb.clicked.connect(self.intersection_event)
         
         diffb = QPushButton('Difference', self)
-        diffb.move(10, 210)
-        diffb.clicked.connect(self.diff_button)
+        diffb.clicked.connect(self.diff_event)
         
         minimizeb = QPushButton('Minimize', self)
-        minimizeb.move(10, 260)
-        minimizeb.clicked.connect(self.minimize_button)
+        minimizeb.clicked.connect(self.minimize_event)
         
         determinizeb = QPushButton('Determinize', self)
-        determinizeb.move(10, 310)
-        determinizeb.clicked.connect(self.determinize_button)
-      
-        listb = QPushButton('listar', self)
-        listb.move(150, 150)
-        listb.clicked.connect(self.listar)
-
-        self.le1 = QLineEdit(self)
-        self.le1.move(130, 22)
+        determinizeb.clicked.connect(self.determinize_event)
         
-        self.le2 = QLineEdit(self)
-        self.le2.move(130, 72)
+        grid.addWidget(createSb, 1, 0)
+        grid.addWidget(createTb, 2, 0)
+        grid.addWidget(deleteSb, 3, 0)
+        grid.addWidget(deleteTb, 4, 0)
+        grid.addWidget(unionb, 5, 0)
+        grid.addWidget(complementb, 6, 0)
+        grid.addWidget(intersectionb, 7, 0)
+        grid.addWidget(diffb, 8, 0)
+        grid.addWidget(minimizeb, 9, 0)
+        grid.addWidget(determinizeb, 10, 0)
 
+        self.setLayout(grid)
+        
+        
         # file bar actions
 
         new_automata = QAction(QIcon('new.png'), '&New FA', self)
@@ -104,19 +102,19 @@ class main_window(QMainWindow):
         for fa in self.FA_list:
             print(fa.name)
 
-    def create_state_button(self):
+    def create_state_event(self):
         pass
 
-    def create_transition_button(self):
+    def create_transition_event(self):
         pass
 
-    def delete_state_button(self):
+    def delete_state_event(self):
         pass
 
-    def create_transition_button(self):
+    def delete_transition_event(self):
         pass
 
-    def union_button(self):
+    def union_event(self):
         union_text1, ok = QInputDialog.getText(self, 'Union', 'Chose the first automata')
 
         if ok:
@@ -127,16 +125,19 @@ class main_window(QMainWindow):
         if ok:
             self.le2.setText(str(union_text2))
 
-    def intersection_button(self):
+    def intersection_event(self):
         pass
 
-    def complement_button(self):
+    def complement_event(self):
         pass
 
-    def minimize_button(self):
+    def diff_event(self):
         pass
 
-    def determinize_button(self):
+    def minimize_event(self):
+        pass
+
+    def determinize_event(self):
         pass
 
     def new_fa(self, owner):
@@ -145,7 +146,6 @@ class main_window(QMainWindow):
             new_FA = Finite_Automata()
             new_FA.set_name(str(self.expression))
             self.FA_list.append(new_FA)
-            print(self.FA_list)
             fa = QLabel('Finite Automata: ' + str(self.expression))
 
     def new_re(self, owner):
