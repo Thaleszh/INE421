@@ -77,7 +77,7 @@ class Finite_Automata(object):
             self.alphabet.append(key)
        
     def delete_transition(self, name_state1, name_state2, key):
-        if name_state1 not in self.states:
+        if name_state1 not in self.transitions.keys():
             print("state not found")
             return
         state1_keys = list(self.transitions[name_state1])
@@ -96,7 +96,7 @@ class Finite_Automata(object):
         self.calculate_alphabet()
 
     def delete_all_transitions(self, name_state, key):
-        if name_state not in self.states:
+        if name_state not in self.transitions.keys():
             print("state not found")
             return
         state_keys = list(self.transitions[name_state])
