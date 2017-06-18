@@ -62,11 +62,11 @@ class gui():
 		self.edit_menu.addAction(self.close)
 
 		# FA options:
-		self.create_state = QAction(QIcon('state.png'), '&Create State', self.main_window)
-		self.create_state.setShortcut('Ctrl+S')
-		self.create_state.setStatusTip('Creates new state to current FA')
-		self.create_state.triggered.connect(self.create_state_event)
-		self.edit_menu.addAction(self.create_state)
+		self.new_state = QAction(QIcon('state.png'), '&Create State', self.main_window)
+		self.new_state.setShortcut('Ctrl+S')
+		self.new_state.setStatusTip('Creates new state to current FA')
+		self.new_state.triggered.connect(self.create_state_event)
+		self.edit_menu.addAction(self.new_state)
 
 		self.delete_state = QAction(QIcon('state.png'), '&Delete State', self.main_window)
 		self.delete_state.setShortcut('Ctrl+Shift+S')
@@ -133,11 +133,11 @@ class gui():
 
 		self.main_window.setCentralWidget(self.central_widget)
 
-		#self.add_tab('m1', ['FA', 'abcd'])
-
-
 		self.main_window.setGeometry(300,300,800,600)
 		self.main_window.show()
+
+		self.create_fa('m1', 'abcd')
+		self.create_state('q0', True, True)
 
 	def allow_FA(self, boolea):
 		if boolea:
@@ -150,7 +150,7 @@ class gui():
 			self.delete_transition.setEnabled(True)
 			self.delete_state.setEnabled(True)
 			self.create_transition.setEnabled(True)
-			self.create_state.setEnabled(True)
+			self.new_state.setEnabled(True)
 			self.close.setEnabled(True)
 		else:
 			self.determinize.setEnabled(False)
@@ -162,7 +162,7 @@ class gui():
 			self.delete_transition.setEnabled(False)
 			self.delete_state.setEnabled(False)
 			self.create_transition.setEnabled(False)
-			self.create_state.setEnabled(False)
+			self.new_state.setEnabled(False)
 			self.close.setEnabled(False)
 
 	# closes current tab
@@ -183,12 +183,6 @@ class gui():
 	def create_state_event(self):
 		state_name, ok = QInputDialog.getText(self.main_window, 'Create State', 'Name the state:')
 		if ok:
-			current_tab = self.tabs.currentWidget()
-			if self.current_fa is None or self.current_fa.name != current_tab.name:				
-				for fa in self.FA_list:
-					if fa.name == current_tab.name:
-						self.current_fa = fa
-						break
 			is_final = QMessageBox.question(self.main_window, 'Final?', 'Is the state final?', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
 			is_initial = QMessageBox.question(self.main_window, 'Final?', 'Is the state initial?', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
 			if is_initial == QMessageBox.Yes:
@@ -199,9 +193,17 @@ class gui():
 				is_final = True
 			else:
 				is_final = False
-			self.current_fa.create_state(state_name, is_initial, is_final)
-			self.update_table()
+			create_state(state_name, is_final, is_initial)
 
+	def create_state(self, state_name, is_final, is_initial):
+		current_tab = self.tabs.currentWidget()
+		if self.current_fa is None or self.current_fa.name != current_tab.name:				
+			for fa in self.FA_list:
+				if fa.name == current_tab.name:
+					self.current_fa = fa
+					break
+		self.current_fa.create_state(state_name, is_initial, is_final)
+		self.update_table()
 
 	def create_transition_event(self):
 		create_transition_text, ok = QInputDialog.getText(self.main_window, 'Create Transition', 'Choose the automata')
@@ -272,23 +274,31 @@ class gui():
 		if ok:
 			pass
 
-	def new_fa(self, owner):
+	def new_fa(self):
 		self.expression, ok = QInputDialog.getText(self.main_window, 'FA Input', 'Enter the name of the Finite Automata: ')
 		if ok:
-			new_FA = Finite_Automata()
-			new_FA.set_name(str(self.expression))
-			self.FA_list.append(new_FA)
 			alphabet, ok = QInputDialog.getText(self.main_window, 'Alphabet Input', 'Enter the alphabet of ' + self.expression)
-			self.add_tab(self.expression, ['FA', alphabet])
+			self.create_fa(expression, alphabet)
 
-	def new_re(self, owner):
+	def create_fa(self, expression, alphabet):
+		new_FA = Finite_Automata()
+		new_FA.set_name(str(expression))
+		self.FA_list.append(new_FA)
+		self.add_tab(expression, ['FA', alphabet])
+
+	def new_re(self):
 		self.expression, ok = QInputDialog.getText(self.main_window, 'RE Input', 'Enter the name of the Regular Expression: ')
 		if ok:
 			re = QLabel('Regular Expression: ' + str(self.expression))
 
-	def add_tab(self, tab_name, tab_type):
-		new_tab = Tab(tab_name, tab_type)
-		self.tabs.addTab(new_tab, tab_name)
+	def cell_changed_event(self, row, column):
+		current_tab = self.tabs.currentWidget()
+		current_item = current_tab.table_widget.item(row, column)
+
+		if current_item.text() != '' :
+			self.current_fa.create_transition(current_tab.states[row], current_item.text() , current_tab.characters[column])
+		#might have added new state
+		self.update_table()
 
 	def update_table(self):
 		current_tab = self.tabs.currentWidget()
@@ -300,13 +310,27 @@ class gui():
 			name = ''
 			for state in self.current_fa.states:
 				name = state
-				if state == self.current_fa.initials:
-					name = '->' + name
+				extra = ''
 				if state in self.current_fa.finals:
-					name = '*' + name
+					extra += '*'
+				if state == self.current_fa.initials:
+					extra += '->'
 				current_tab.states.append(name)
-		current_tab.table_widget.setVerticalHeaderLabels(current_tab.states)
+				current_tab.states_extra.append(extra)
+		names = list()
+		i = 0
+		while i < len(current_tab.states):
+			names.append(current_tab.states_extra[i] + current_tab.states[i])
+			i += 1
+		print(names)
+		print(current_tab.states_extra)
+		print(current_tab.states)
+		current_tab.table_widget.setVerticalHeaderLabels(names)
 
+	def add_tab(self, tab_name, tab_type):
+		new_tab = Tab(tab_name, tab_type)
+		self.tabs.addTab(new_tab, tab_name)
+		new_tab.table_widget.cellChanged.connect(self.cell_changed_event)
 
 class Tab(QWidget):
 	def __init__(self, tab_name, tab_type):
@@ -316,6 +340,7 @@ class Tab(QWidget):
 		self.characters = list()
 		self.table_widget = QTableWidget()
 		self.states = list()
+		self.states_extra = list()
 		self.layout = QVBoxLayout(self)
 		if self.type == 'FA':
 			self.characters = list()
