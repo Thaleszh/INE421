@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import *
 from Finite_Automata import Finite_Automata
-import FA_Algorithms
+from FA_Algorithms import *
 
 class gui():
 
@@ -74,17 +74,17 @@ class gui():
 		self.delete_state.triggered.connect(self.delete_state_event)
 		self.edit_menu.addAction(self.delete_state)
 
-		self.create_transition = QAction(QIcon('state.png'), '&Create Transition', self.main_window)
-		self.create_transition.setShortcut('Ctrl+T')
-		self.create_transition.setStatusTip('Creates new transition to current FA')
-		self.create_transition.triggered.connect(self.create_transition_event)
-		self.edit_menu.addAction(self.create_transition)
+		self.add_final_state = QAction(QIcon('state.png'), '&Add state to finals', self.main_window)
+		self.add_final_state.setShortcut('Ctrl+F')
+		self.add_final_state.setStatusTip('Add a state to final set in current FA')
+		self.add_final_state.triggered.connect(self.add_final_state_event)
+		self.edit_menu.addAction(self.add_final_state)
 
-		self.delete_transition = QAction(QIcon('state.png'), '&Delete Transition', self.main_window)
-		self.delete_transition.setShortcut('Ctrl+Shift+T')
-		self.delete_transition.setStatusTip('Deletes a transition in current FA')
-		self.delete_transition.triggered.connect(self.delete_transition_event)
-		self.edit_menu.addAction(self.delete_transition)
+		self.set_initial_state = QAction(QIcon('state.png'), '&Set Initial', self.main_window)
+		self.set_initial_state.setShortcut('Ctrl+F')
+		self.set_initial_state.setStatusTip('Set a state as initial of this AF')
+		self.set_initial_state.triggered.connect(self.set_initial_state_event)
+		self.edit_menu.addAction(self.set_initial_state)
 
 		self.unite = QAction(QIcon('state.png'), '&Union', self.main_window)
 		self.unite.setShortcut('Ctrl+U')
@@ -129,6 +129,8 @@ class gui():
 		self.tabs.resize(800,600)
 		self.central_widget
 
+		self.disable_changes = False
+
 		self.tabs.currentChanged.connect(self.tab_changed)
 
 		self.main_window.setCentralWidget(self.central_widget)
@@ -136,8 +138,9 @@ class gui():
 		self.main_window.setGeometry(300,300,800,600)
 		self.main_window.show()
 
-		self.create_fa('m1', 'abcd')
+		self.create_fa('m1', 'ab')
 		self.create_state('q0', True, True)
+		self.create_fa('m2', 'abc')
 
 	def allow_FA(self, boolea):
 		if boolea:
@@ -147,11 +150,11 @@ class gui():
 			self.complement.setEnabled(True)
 			self.intersection.setEnabled(True)
 			self.unite.setEnabled(True)
-			self.delete_transition.setEnabled(True)
 			self.delete_state.setEnabled(True)
-			self.create_transition.setEnabled(True)
 			self.new_state.setEnabled(True)
 			self.close.setEnabled(True)
+			self.add_final_state.setEnabled(True)
+			self.set_initial_state.setEnabled(True)
 		else:
 			self.determinize.setEnabled(False)
 			self.minimize.setEnabled(False)
@@ -159,26 +162,11 @@ class gui():
 			self.complement.setEnabled(False)
 			self.intersection.setEnabled(False)
 			self.unite.setEnabled(False)
-			self.delete_transition.setEnabled(False)
 			self.delete_state.setEnabled(False)
-			self.create_transition.setEnabled(False)
 			self.new_state.setEnabled(False)
 			self.close.setEnabled(False)
-
-	# closes current tab
-	def close_event(self):
-		pass
-
-	def tab_changed(self):
-		current_tab = self.tabs.currentWidget()
-		if current_tab.type == 'FA':
-			self.allow_FA(True)
-			for fa in self.FA_list:
-					if fa.name == current_tab.name:
-						self.current_fa = fa
-						break
-		else:
-			self.allow_FA(False)
+			self.add_final_state.setEnabled(False)
+			self.set_initial_state.setEnabled(False)
 
 	def create_state_event(self):
 		state_name, ok = QInputDialog.getText(self.main_window, 'Create State', 'Name the state:')
@@ -193,7 +181,7 @@ class gui():
 				is_final = True
 			else:
 				is_final = False
-			create_state(state_name, is_final, is_initial)
+			self.create_state(state_name, is_final, is_initial)
 
 	def create_state(self, state_name, is_final, is_initial):
 		current_tab = self.tabs.currentWidget()
@@ -205,34 +193,99 @@ class gui():
 		self.current_fa.create_state(state_name, is_initial, is_final)
 		self.update_table()
 
-	def create_transition_event(self):
-		create_transition_text, ok = QInputDialog.getText(self.main_window, 'Create Transition', 'Choose the automata')
-
-		if ok:
-			pass
-
 	def delete_state_event(self):
-		delete_state_text, ok = QInputDialog.getText(self.main_window, 'Delete State', 'Choose the automata')
+		delete_state_text, ok = QInputDialog.getText(self.main_window, 'Delete State', 'Name the state:')
 
 		if ok:
-			pass
+			self.remove_state(delete_state_text)
 
-	def delete_transition_event(self):
-		delete_transition_text, ok = QInputDialog.getText(self.main_window, 'Delete Transition', 'Choose the automata')
+	def remove_state(self, name):
+		self.current_fa.delete_state(name)
+		self.update_table()
+
+	def add_final_state_event(self):
+		final_state, ok = QInputDialog.getText(self.main_window, 'Final State', 'Name of the state:')
 
 		if ok:
-			pass
+			self.add_final(final_state)
+
+	def add_final(self, name):
+		if name in self.current_fa.states:
+			self.current_fa.add_final(name)
+		self.update_table()
+
+	def set_initial_state_event(self):
+		initial_state, ok = QInputDialog.getText(self.main_window, 'Initial State', 'Name of the state:')
+
+		if ok:
+			self.set_initial(initial_state)
+
+	def set_initial(self, name):
+		if name in self.current_fa.states:
+			self.current_fa.add_initial(name)
+		self.update_table()
 
 	def union_event(self):
-		union_text1, ok = QInputDialog.getText(self.main_window, 'Union', 'Choose the first automata')
+		found = False
+		while not found:
+			union_text1, ok = QInputDialog.getText(self.main_window, 'Union', 'Name of the second automata:')
+			if ok:
+				found = False
+				for automata in self.FA_list:
+					if union_text1 == automata.name:
+						found = True
+						print('going to unite ' + self.current_fa.name + ' with ' + automata.name)
+						self.unite_(self.current_fa, automata)
+				if not found:
+					again = QMessageBox.question(self.main_window, 'Not Found', 'The second automata was not found, try again?', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+					if again == QMessageBox.No:
+						break
 
-		if ok:
-			self.le1.setText(str(union_text1))
+	def unite_(self, automata1, automata2):
+		print("------Union------")
+		print("Automata1: " + automata1.name)
+		print('initial state: ' + automata1.initials)
+		print('States:')
+		print(automata1.states)
+		print('Finals:')
+		print(automata1.finals)
+		print('Transitions: ')
+		print(automata1.transitions)
+		print('Alphabet: ')
+		print(automata1.alphabet)
 
-		union_text2, ok = QInputDialog.getText(self.main_window, 'Union', 'Choose the second automata')
+		print()
+		print("Automata1: " + automata2.name)
+		print('initial state: ' + automata2.initials)
+		print('States:')
+		print(automata2.states)
+		print('Finals:')
+		print(automata2.finals)
+		print('Transitions: ')
+		print(automata2.transitions)
+		print('Alphabet: ')
+		print(automata2.alphabet)
+		new_fa = union(automata1, automata2)
+		print('union done')
+		new_fa.name = automata1.name + ' + ' + automata2.name
+		print('name of new automata: ' + new_fa.name)
+		new_fa.calculate_alphabet()
 
-		if ok:
-			self.le2.setText(str(union_text2))
+		self.FA_list.append(new_fa)
+
+		print()
+		print("Automata1: " + new_fa.name)
+		print('initial state: ' + new_fa.initials)
+		print('States:')
+		print(new_fa.states)
+		print('Finals:')
+		print(new_fa.finals)
+		print('Transitions: ')
+		print(new_fa.transitions)
+		print('Alphabet: ')
+		print(new_fa.alphabet)		
+		self.add_tab(new_fa.name, ['FA', new_fa.alphabet])
+		self.update_table()
 
 	def intersection_event(self):
 		intersection_text1, ok = QInputDialog.getText(self.main_window, 'Intersection','Choose the first automata')
@@ -246,10 +299,10 @@ class gui():
 			self.le2.setText(str(union_text2))
 
 	def complement_event(self):
-		complement_text, ok = QInputDialog.getText(self.main_window, 'Complement', 'Choose the automata')
-
-		if ok:
-			pass
+		temp_fa = complement(self.current_fa)
+		self.FA_list[self.FA_list.index(self.current_fa)] = temp_fa
+		self.current_fa = temp_fa
+		self.update_table()
 
 	def diff_event(self):
 		diff_text1, ok = QInputDialog.getText(self.main_window, 'Difference', 'Choose the first automata')
@@ -263,22 +316,18 @@ class gui():
 			self.le2.setText(str(union_text2))
 
 	def minimize_event(self):
-		minimize_text, ok = QInputDialog.getText(self.main_window, 'Minimize', 'Choose the automata')
-
-		if ok:
-			pass
+		minimize(self.current_fa)
+		self.update_table()
 
 	def determinize_event(self):
-		determinize_text, ok = QInputDialog.getText(self.main_window, 'Determinize', 'Choose the automata')
-
-		if ok:
-			pass
+		determinize(self.current_fa)
+		self.update_table()
 
 	def new_fa(self):
 		self.expression, ok = QInputDialog.getText(self.main_window, 'FA Input', 'Enter the name of the Finite Automata: ')
 		if ok:
 			alphabet, ok = QInputDialog.getText(self.main_window, 'Alphabet Input', 'Enter the alphabet of ' + self.expression)
-			self.create_fa(expression, alphabet)
+			self.create_fa(self.expression, alphabet)
 
 	def create_fa(self, expression, alphabet):
 		new_FA = Finite_Automata()
@@ -292,32 +341,34 @@ class gui():
 			re = QLabel('Regular Expression: ' + str(self.expression))
 
 	def cell_changed_event(self, row, column):
-		current_tab = self.tabs.currentWidget()
-		current_item = current_tab.table_widget.item(row, column)
+		if not self.disable_changes:
+			current_tab = self.tabs.currentWidget()
+			current_item = current_tab.table_widget.item(row, column)
 
-		if current_item.text() != '' :
-			self.current_fa.create_transition(current_tab.states[row], current_item.text() , current_tab.characters[column])
-		#might have added new state
-		self.update_table()
+			if current_item.text() != '' :
+				self.current_fa.delete_all_transitions(current_tab.states[row], current_tab.characters[column])
+				self.current_fa.create_transition(current_tab.states[row], current_item.text() , current_tab.characters[column])
+			else:
+				self.current_fa.delete_all_transitions(current_tab.states[row], current_tab.characters[column])
+			#might have added new state
+			self.update_table()
 
 	def update_table(self):
 		current_tab = self.tabs.currentWidget()
-		#current_tab.table_widget.setColumnCount(len(current_tab.characters))
-		#current_tab.table_widget.setHorizontalHeaderLabels(current_tab.characters)
-		if len(current_tab.states) != len(self.current_fa.states):
-			current_tab.table_widget.setRowCount(len(self.current_fa.states))
-			current_tab.states.clear()
-			current_tab.states_extra.clear()
-			name = ''
-			for state in self.current_fa.states:
-				name = state
-				extra = ''
-				if state in self.current_fa.finals:
-					extra += '*'
-				if state == self.current_fa.initials:
-					extra += '->'
-				current_tab.states.append(name)
-				current_tab.states_extra.append(extra)
+		self.disable_changes = True
+		current_tab.table_widget.setRowCount(len(self.current_fa.states))
+		current_tab.states.clear()
+		current_tab.states_extra.clear()
+		name = ''
+		for state in self.current_fa.states:
+			name = state
+			extra = ''
+			if state in self.current_fa.finals:
+				extra += '*'
+			if state == self.current_fa.initials:
+				extra += '->'
+			current_tab.states.append(name)
+			current_tab.states_extra.append(extra)
 		names = list()
 		i = 0
 		while i < len(current_tab.states):
@@ -325,10 +376,49 @@ class gui():
 			i += 1
 		current_tab.table_widget.setVerticalHeaderLabels(names)
 
+		#update all cells with transitions:
+		for index, state in enumerate(self.current_fa.states):
+			if state in self.current_fa.transitions:
+				keys = self.current_fa.transitions[state].keys()
+				for key in keys:
+					item = current_tab.table_widget.item(index, current_tab.characters.index(key))
+					if item is not None:
+						item.setText(self.current_fa.transitions[state][key])
+		self.disable_changes = False
+
 	def add_tab(self, tab_name, tab_type):
 		new_tab = Tab(tab_name, tab_type)
 		self.tabs.addTab(new_tab, tab_name)
 		new_tab.table_widget.cellChanged.connect(self.cell_changed_event)
+
+	# closes current tab
+	def close_event(self):
+		current_tab = self.tabs.currentWidget()
+		self.tabs.removeTab(self.tabs.indexOf(current_tab))
+
+	# tab changed event
+	def tab_changed(self):
+		current_tab = self.tabs.currentWidget()
+		if current_tab is not None and current_tab.type == 'FA':
+			self.allow_FA(True)
+			for fa in self.FA_list:
+					if fa.name == current_tab.name:
+						self.current_fa = fa
+						break
+			print()
+			print("Current FA: " + self.current_fa.name)
+			print('initial state: ' + self.current_fa.initials)
+			print('States:')
+			print(self.current_fa.states)
+			print('Finals:')
+			print(self.current_fa.finals)
+			print('Transitions: ')
+			print(self.current_fa.transitions)
+			print('Alphabet: ')
+			print(self.current_fa.alphabet)		
+			self.update_table()
+		else:
+			self.allow_FA(False)
 
 class Tab(QWidget):
 	def __init__(self, tab_name, tab_type):
