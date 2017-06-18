@@ -87,6 +87,21 @@ class Finite_Automata(object):
         if name_state2 is not self.transitions[name_state1][key]:
             print("transition not found")
             return
-        del self.transitions[name_state1][key]
+        trans_split = self.transitions[name_state1][key].split(", ")
+        trans_split.remove(name_state2)
+        if trans_split != []:
+            self.transitions[name_state1][key] = ""
+            for t in trans_split:
+                self.transitions[name_state1][key] += t
         self.calculate_alphabet()
 
+    def delete_all_transitions(self, name_state, key):
+        if name_state1 not in self.states:
+            print("state not found")
+            return
+        state1_keys = list(self.transitions[name_state1])
+        if key not in state1_keys:
+            print("key not found")
+            return
+        del self.transitions[name_state][key]
+        self.calculate_alphabet()
