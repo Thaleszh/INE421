@@ -307,6 +307,7 @@ class gui():
 		if len(current_tab.states) != len(self.current_fa.states):
 			current_tab.table_widget.setRowCount(len(self.current_fa.states))
 			current_tab.states.clear()
+			current_tab.states_extra.clear()
 			name = ''
 			for state in self.current_fa.states:
 				name = state
@@ -322,9 +323,6 @@ class gui():
 		while i < len(current_tab.states):
 			names.append(current_tab.states_extra[i] + current_tab.states[i])
 			i += 1
-		print(names)
-		print(current_tab.states_extra)
-		print(current_tab.states)
 		current_tab.table_widget.setVerticalHeaderLabels(names)
 
 	def add_tab(self, tab_name, tab_type):
