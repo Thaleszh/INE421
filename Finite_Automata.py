@@ -63,9 +63,9 @@ class Finite_Automata(object):
 
     def create_transition(self, name_state1, name_state2, key):
         if name_state1 not in self.states:
-            self.create_state(name_state1, False, False)
+            self.create_state2(name_state1, False, False)
         if name_state2 not in self.states:
-            self.create_state(name_state2, False, False)
+            self.create_state2(name_state2, False, False)
         self.create_transition_aux(name_state1)
         if key in self.transitions[name_state1].keys():
             split = self.transitions[name_state1][key].split(', ')
@@ -84,7 +84,7 @@ class Finite_Automata(object):
         if key not in state1_keys:
             print("key not found")
             return
-        if name_state2 is not self.transitions[name_state1][key]:
+        if name_state2 not in self.transitions[name_state1][key]:
             print("transition not found")
             return
         trans_split = self.transitions[name_state1][key].split(", ")
@@ -96,11 +96,11 @@ class Finite_Automata(object):
         self.calculate_alphabet()
 
     def delete_all_transitions(self, name_state, key):
-        if name_state1 not in self.states:
+        if name_state not in self.states:
             print("state not found")
             return
-        state1_keys = list(self.transitions[name_state1])
-        if key not in state1_keys:
+        state_keys = list(self.transitions[name_state])
+        if key not in state_keys:
             print("key not found")
             return
         del self.transitions[name_state][key]
