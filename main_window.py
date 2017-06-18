@@ -15,6 +15,10 @@ class main_window(QMainWindow):
         
         
     def initUI(self):
+        
+        grid = QGridLayout()
+        grid.setSpacing(5)
+
         #buttons
         createSb = QPushButton('Create State', self)
         createSb.clicked.connect(self.create_state_event)
@@ -46,21 +50,17 @@ class main_window(QMainWindow):
         determinizeb = QPushButton('Determinize', self)
         determinizeb.clicked.connect(self.determinize_event)
         
-        grid = QGridLayout()
-        grid.setColumnStretch(1, 4)
-        grid.setColumnStretch(2, 4)
-        grid.setSpacing(5)
 
-        grid.addWidget(createSb, 1, 0)
-        grid.addWidget(createTb, 2, 0)
-        grid.addWidget(deleteSb, 3, 0)
-        grid.addWidget(deleteTb, 4, 0)
-        grid.addWidget(unionb, 5, 0)
-        grid.addWidget(complementb, 6, 0)
-        grid.addWidget(intersectionb, 7, 0)
-        grid.addWidget(diffb, 8, 0)
-        grid.addWidget(minimizeb, 9, 0)
-        grid.addWidget(determinizeb, 10, 0)
+        grid.addWidget(createSb, 0, 0)
+        grid.addWidget(createTb, 1, 0)
+        grid.addWidget(deleteSb, 2, 0)
+        grid.addWidget(deleteTb, 0, 1)
+        grid.addWidget(unionb, 1, 1)
+        grid.addWidget(complementb, 2, 1)
+        grid.addWidget(intersectionb, 0, 2)
+        grid.addWidget(diffb, 1, 2)
+        grid.addWidget(minimizeb, 2, 2)
+        grid.addWidget(determinizeb, 0, 3)
 
         
         # file bar actions
@@ -99,82 +99,82 @@ class main_window(QMainWindow):
         self.show()
     
     def create_state_event(self):
-        create_state_text, ok = QInputDialog.getText(self, 'Create State', 'Choose the automata')
+        create_state_text, ok = QInputDialog.getText(self, 'Create State', 'Choose the automata:')
 
         if ok:
-        pass
+            pass
 
     def create_transition_event(self):
-        create_transition_text, ok = QInputDialog.getText(self, 'Create Transition', 'Choose the automata')
+        create_transition_text, ok = QInputDialog.getText(self, 'Create Transition', 'Choose the automata:')
 
         if ok:
-        pass
+            pass
 
     def delete_state_event(self):
-        delete_state_text, ok = QInputDialog.getText(self, 'Delete State', 'Choose the automata')
+        delete_state_text, ok = QInputDialog.getText(self, 'Delete State', 'Choose the automata:')
 
         if ok:
-        pass
+            pass
 
     def delete_transition_event(self):
-        delete_transition_text, ok = QInputDialog.getText(self, 'Delete Transition', 'Choose the automata')
+        delete_transition_text, ok = QInputDialog.getText(self, 'Delete Transition', 'Choose the automata:')
 
         if ok:
-        pass
+            pass
 
     def union_event(self):
-        union_text1, ok = QInputDialog.getText(self, 'Union', 'Choose the first automata')
+        union_text1, ok = QInputDialog.getText(self, 'Union', 'Choose the first automata:')
 
         if ok:
             self.le1.setText(str(union_text1))
 
-        union_text2, ok = QInputDialog.getText(self, 'Union', 'Choose the second automata')
+        union_text2, ok = QInputDialog.getText(self, 'Union', 'Choose the second automata:')
 
         if ok:
             self.le2.setText(str(union_text2))
 
     def intersection_event(self):
-        intersection_text1, ok = QInputDialog.getText(self, 'Intersection','Choose the first automata')
+        intersection_text1, ok = QInputDialog.getText(self, 'Intersection', 'Choose the first automata:')
 
         if ok:
             self.le1.setText(str(union_text1))
 
-        intersection_text2, ok = QInputDialog.getText(self, 'Intersection', 'Choose the second automata')
+        intersection_text2, ok = QInputDialog.getText(self, 'Intersection', 'Choose the second automata:')
 
         if ok:
             self.le2.setText(str(union_text2))
 
     def complement_event(self):
-        complement_text, ok = QInputDialog.getText(self, 'Complement', 'Choose the automata')
+        complement_text, ok = QInputDialog.getText(self, 'Complement', 'Choose the automata:')
 
         if ok:
-        pass
+            pass
 
     def diff_event(self):
-        diff_text1, ok = QInputDialog.getText(self, 'Difference', 'Choose the first automata')
+        diff_text1, ok = QInputDialog.getText(self, 'Difference', 'Choose the first automata:')
 
         if ok:
             self.le1.setText(str(union_text1))
 
-        diff_text2, ok = QInputDialog.getText(self, 'Difference', 'Choose the second automata')
+        diff_text2, ok = QInputDialog.getText(self, 'Difference', 'Choose the second automata:')
 
         if ok:
             self.le2.setText(str(union_text2))
 
     def minimize_event(self):
-        minimize_text, ok = QInputDialog.getText(self, 'Minimize', 'Choose the automata')
+        minimize_text, ok = QInputDialog.getText(self, 'Minimize', 'Choose the automata:')
 
         if ok:
-        pass
+            pass
 
     def determinize_event(self):
-        determinize_text, ok = QInputDialog.getText(self, 'Determinize', 'Choose the automata')
+        determinize_text, ok = QInputDialog.getText(self, 'Determinize', 'Choose the automata:')
 
         if ok:
-        pass
+            pass
 
     def new_fa(self, owner):
-        self.expression, ok = QInputDialog.getText(self, 'FA Input', 'Enter the Finite Automata: ')
+        self.expression, ok = QInputDialog.getText(self, 'FA Input', 'Enter name: ')
         if ok:
             new_FA = Finite_Automata()
             new_FA.set_name(str(self.expression))
