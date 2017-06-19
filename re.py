@@ -268,8 +268,7 @@ def de_simone(re):
             composure.append(None)
     print('Compositions: ' + str(composure))
     new_states = list()
-    new_states.append([copy.copy(transitions), copy.copy(composition), final])
-    print('State 0: ' + str(new_states[0][0]))
+    new_states.append([copy.copy(transitions), copy.copy(composition), final, 0])
 
 
     final = False
@@ -283,6 +282,7 @@ def de_simone(re):
     while new_states:
         # for each state found
         #for new_state in new_states:
+        print('Computing state ' + str(new_states[0][3]) + ': ' + str(new_states[0][0]))
         # for each transition in the previous state, check all elements and see where they can reach
         for no, transition in enumerate(new_states[0][0]):
             if ':' not in transition:   
@@ -333,23 +333,24 @@ def de_simone(re):
                                 temp_transitions.remove(transition) 
                             temp_transitions.add(str(transition + ':q'+ str(index)))
                             break
-                for index, state in enumerate(new_states):
-                    print('Checking state ' + str(index))
-                    # composition needs to be the exact size
-                    if len(state[1]) == len(composition):
-                        exists = True
-                        for node in state[1]:
-                            if node not in composition:
-                                exists = False
-                        # if it exists, set the transition to that state
-                        if exists:
-                            if transition in transitions:
-                                transitions.remove(transition)
-                            transitions.add(str(transition + ':q' + str(index + len(states))))
-                            if transition in temp_transitions:
-                                temp_transitions.remove(transition) 
-                            temp_transitions.add(str(transition + ':q'+ str(index + len(states))))
-                            break
+                if not exists:
+                    for index, state in enumerate(new_states):
+                        print('Checking new state ' + str(index))
+                        # composition needs to be the exact size
+                        if len(state[1]) == len(composition):
+                            exists = True
+                            for node in state[1]:
+                                if node not in composition:
+                                    exists = False
+                            # if it exists, set the transition to that state
+                            if exists:
+                                if transition in transitions:
+                                    transitions.remove(transition)
+                                transitions.add(str(transition + ':q' + str(index + len(states))))
+                                if transition in temp_transitions:
+                                    temp_transitions.remove(transition) 
+                                temp_transitions.add(str(transition + ':q'+ str(index + len(states))))
+                                break
                 print('State exists: ' + str(exists))
                 # if the state did exist, change transition to it. Else create the state
                 if not exists:
@@ -357,7 +358,7 @@ def de_simone(re):
                                 temp_transitions.remove(transition)
                     temp_transitions.add(transition + ':q'+ str(len(states) + len(new_states)))
                     print('Transition was: ' + transition)
-                    print('Transition changed to : ' + transition + ':q'+ str(len(states) + len(new_states)))
+                    print('Transition changed to: ' + transition + ':q'+ str(len(states) + len(new_states)))
                     print('')
                     print('Created new State:')
                     print('Transitions: ' + str(transitions))
@@ -368,7 +369,7 @@ def de_simone(re):
                         else:
                             composure.append(None)
                     print('Compositions: ' + str(composure))
-                    new_states.append([copy.copy(transitions), copy.copy(composition), final])
+                    new_states.append([copy.copy(transitions), copy.copy(composition), final, len(states) + len(new_states)])
                 print('Final transitions: ' + str(transitions))
                 composition.clear()
                 transitions.clear()
@@ -421,11 +422,9 @@ def de_simone(re):
     return fa
 
 if __name__ == '__main__':
-    strings = ['a|a*c', '(a|b)', '((a|b)*ab)']
+    strings = ['a|a*c', '(a|b)', '((a|b)*ab)', 'a?((b|a(ba*))*)']
     finite_automatas = list()
 
     for element in strings:
         print(dot_placer(element, set()))
         finite_automatas.append(de_simone(element))
-
-
