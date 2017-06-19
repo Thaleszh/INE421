@@ -269,6 +269,9 @@ def complement(fa1):
     
     fa2.initials = fa1.initials
 
+    for a in fa1.alphabet:
+        fa2.alphabet.append(a)
+
     for k in fa1.transitions.keys():
         fa2.transitions[k] = {}
         for a in fa1.alphabet:

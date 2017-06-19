@@ -1,10 +1,112 @@
-from FA_Algorithms import determinize, minimize, complement, union
+from FA_Algorithms import determinize, minimize, complement, union, dif
 from FA_Algorithms import determinize_epsilon
 from Finite_Automata import Finite_Automata
 #import pdb
 
 
 def main():
+
+    fa_test1 = Finite_Automata()
+    fa_test1.create_state("s0", True, False)
+    fa_test1.create_state("s1", False, True)
+
+    fa_test1.create_transition("s0", "s1", 'a')
+    fa_test1.create_transition("s0", "s1", 'b')
+    fa_test1.create_transition("s0", "s0", 'c')
+    fa_test1.create_transition("s1", "s1", 'a')
+    fa_test1.create_transition("s1", "s1", 'b')
+    fa_test1.create_transition("s1", "s0", 'c')
+    
+    print('FA 1')
+    print(fa_test1.alphabet)
+    print(fa_test1.states)
+    print(fa_test1.finals)
+    print(fa_test1.initials)
+    print(fa_test1.transitions)
+    print('\n')
+
+    fa_test2 = Finite_Automata()
+    fa_test2.create_state("q0", True, True)
+    fa_test2.create_state("q1", False, False)
+
+    fa_test2.create_transition("q0", "q1", 'a')
+    fa_test2.create_transition("q0", "q0", 'b')
+    fa_test2.create_transition("q1", "q0", 'a')
+    fa_test2.create_transition("q1", "q1", 'b')
+    
+    print('FA 2')
+    print(fa_test2.alphabet)
+    print(fa_test2.states)
+    print(fa_test2.finals)
+    print(fa_test2.initials)
+    print(fa_test2.transitions)
+    print('\n')
+
+    not_fa_test1 = complement(fa_test1)
+    not_fa_test2 = complement(fa_test2)
+
+    print('not FA1')
+    print(not_fa_test1.alphabet)
+    print(not_fa_test1.states)
+    print(not_fa_test1.finals)
+    print(not_fa_test1.initials)
+    print(not_fa_test1.transitions)
+    print('not FA2')
+    print(not_fa_test2.alphabet)
+    print(not_fa_test2.states)
+    print(not_fa_test2.finals)
+    print(not_fa_test2.initials)
+    print(not_fa_test2.transitions)
+    print('\n')
+
+    union_not = complement(union(not_fa_test1, fa_test2))
+    print('Union not')
+    print(union_not.alphabet)
+    print(union_not.states)
+    print(union_not.finals)
+    print(union_not.initials)
+    print(union_not.transitions)
+    print('\n')
+
+    fa_test3 = dif(fa_test1, fa_test2)
+
+    print('FA 3')
+    print(fa_test3.alphabet)
+    print(fa_test3.states)
+    print(fa_test3.finals)
+    print(fa_test3.initials)
+    print(fa_test3.transitions)
+    print('\n')
+
+'''    
+    fa_test = Finite_Automata()
+    fa_test.create_state("0", True, False)
+    fa_test.create_state("1", False, False)
+    fa_test.create_state("2", False, True)
+
+    fa_test.create_transition("0", "0", 'a')
+    fa_test.create_transition("0", "1", 'b')
+    fa_test.create_transition("0", "2", 'b')
+    fa_test.create_transition("1", "1", 'a')
+    fa_test.create_transition("1", "2", 'b')
+    fa_test.create_transition("2", "2", 'a')
+    fa_test.create_transition("2", "2", 'b')
+    
+    print(fa_test.alphabet)
+    print(fa_test.states)
+    print(fa_test.finals)
+    print(fa_test.initials)
+    print(fa_test.transitions)
+
+    fa_test.delete_all_transitions("0", 'b')
+    
+    print(fa_test.alphabet)
+    print(fa_test.states)
+    print(fa_test.finals)
+    print(fa_test.initials)
+    print(fa_test.transitions)
+''' 
+'''
     fa_epsilon = Finite_Automata()
     fa_epsilon.create_state("0", True, False)
     fa_epsilon.create_state("1", False, False)
@@ -34,6 +136,7 @@ def main():
     print(fa_epsilon.finals)
     print(fa_epsilon.initials)
     print(fa_epsilon.transitions)
+'''
 '''    
     fa_div_3 = Finite_Automata()
     fa_div_3.create_state("0", True, True)
