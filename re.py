@@ -14,12 +14,12 @@ class Node:
         self.count = 0
 
         # if is the last character to be computed
-        print('')
-        print('Creating node, my expression: ' + re)
+        #print('')
+        #print('Creating node, my expression: ' + re)
         if len(expression) == 1:
             self.operator = re[0]
-            print('Creating node, operator: ' + self.operator)
-            print('I am a leaf')
+            #print('Creating node, operator: ' + self.operator)
+            #print('I am a leaf')
 
         else:
             # find the next operator to compute, and find its index
@@ -29,16 +29,16 @@ class Node:
                 self.operator = re[index]
             else:
                 self.operator = re[0]
-            print('Creating node, operator: ' + self.operator)
+            #print('Creating node, operator: ' + self.operator)
             # section the entry expression into right or left
             l_string = re[0:index]
-            print('My left string will have: ' + str(l_string))
+            #print('My left string will have: ' + str(l_string))
             # if it isn't the last character on the right
             if (index + 1) != len(re):
                 r_string = re[index+1:]
             else:
                 r_string = None
-            print('My right string will have: ' + str(r_string))
+            #print('My right string will have: ' + str(r_string))
             # if there is something on the right or left, make a node out of it
             if l_string:
                 self.left = Node(l_string, self)
@@ -47,7 +47,7 @@ class Node:
 
     # going up
     def up(self, composition, up):
-        print("Up - node : " + str(self.count)+ ' - ' + self.operator)
+        #print("Up - node : " + str(self.count)+ ' - ' + self.operator)
         # if its a * go down and up from the next
         if self.operator == '*':
             # if it's the first time passing
@@ -78,16 +78,15 @@ class Node:
             composition.append(self)
 
     def up_start(self):
-        print("Starting down operation from: " + str(self.count)+ ' - ' + self.operator)
+        #print("Starting down operation from: " + str(self.count)+ ' - ' + self.operator)
         composition = list()
         up = set()
-        up.add(self)
         self.up(composition, up)
         return composition
 
     # going down
     def down(self, composition, up):
-        print("Down - node : " + str(self.count)+ ' - ' + self.operator)
+        #print("Down - node : " + str(self.count)+ ' - ' + self.operator)
         # if it's * or ? go down left and up to the next
         if self.operator in {'*', '?'}:
             self.left.down(composition, up)
@@ -107,7 +106,7 @@ class Node:
             composition.append(self)
 
     def down_start(self):
-        print("Starting down operation: " + str(self.count)+ ' - ' + self.operator)
+        #print("Starting down operation: " + str(self.count)+ ' - ' + self.operator)
         composition = list()
         up = set()
         self.down(composition, up)
@@ -115,8 +114,8 @@ class Node:
 
     # links the list and numbers each position
     def link_start(self):
-        print("Starting link operation: " + str(self.count)+ ' - ' + self.operator)
-        self.count = 1
+        #print("Starting link operation: " + str(self.count)+ ' - ' + self.operator)
+        self.count = 0
         composition = list()
         self.link_count(self.count, composition)
         self.link(composition)
@@ -129,8 +128,8 @@ class Node:
             self.count = 1 + self.left.link_count(number, composition)        
         number = self.count
         composition.append(self)
-        print("Link operation, I am: " + str(self.count)+ ' - ' + self.operator)
-        print('')
+        #print("Link operation, I am: " + str(self.count)+ ' - ' + self.operator)
+        #print('')
         if self.right is not None:
             number = self.right.link_count(self.count, composition)
 
@@ -139,10 +138,12 @@ class Node:
     def link(self, composition):
         if self.left is not None:
             self.left.link(composition)
-        if len(composition) < self.count:
+        if len(composition) == self.count:
             self.next = None
+            #print('Node: ' + str(self.count) + ' - ' + self.operator + '. My next is: None')
         elif len(composition) != self.count:
             self.next = composition[self.count]
+            #print('Node: ' + str(self.count) + ' - ' + self.operator + '. My next is: ' + str(self.next.count) + ' - ' + self.next.operator)
         if self.right is not None:
             self.right.link(composition)
 
@@ -179,7 +180,7 @@ class Node:
                 elif char == ')':
                     parenthesis -= 1
                 elif parenthesis == 0 and char == symbol:
-                    print('index returned: ' + str(index))
+                    #print('index returned: ' + str(index))
                     return index
         return re
 
@@ -275,22 +276,21 @@ def de_simone(re):
 
     # set to hold the next transitions of the state 
     temp_transitions = set()
-    temp_states = list()
 
     composition.clear()
     transitions.clear()
     # while new states are found
     while new_states:
         # for each state found
-        for new_state in new_states:
-            # for each transition in the previous state, check all elements and see where they can reach
-            for no, transition in enumerate(new_state[0]):
+        #for new_state in new_states:
+        # for each transition in the previous state, check all elements and see where they can reach
+        for no, transition in enumerate(new_states[0][0]):
+            if ':' not in transition:   
                 temp_transitions.add(transition)
                 final = False
                 print()
                 print('Examining transition: ' + transition)
-                for element in new_state[1]:
-                    print('Examining component: ' + element.operator)
+                for element in new_states[0][1]:
                     # if the right operator
                     if element is not None and element.operator == transition:
                         # for each element, create what it can access
@@ -303,11 +303,11 @@ def de_simone(re):
                             nodes = element.next.up_start()
                         print('Number of nodes found: ' + str(len(nodes)))
                         for index, node in enumerate(nodes):
-                            print('Node: ' + str(node.count) + '-' + node.operator)
                             if node is None:
                                 final = True
                                 composition.add(None)
                             else:
+                                print('Node: ' + str(node.count) + '-' + node.operator)
                                 if node.operator in alphabet:
                                     composition.add(node)
                                     transitions.add(str(node.operator))
@@ -329,13 +329,32 @@ def de_simone(re):
                             if transition in transitions:
                                 transitions.remove(transition)
                             transitions.add(str(transition + ':q' + str(index)))
-                            temp_transitions.remove(transition) 
+                            if transition in temp_transitions:
+                                temp_transitions.remove(transition) 
                             temp_transitions.add(str(transition + ':q'+ str(index)))
+                            break
+                for index, state in enumerate(new_states):
+                    print('Checking state ' + str(index))
+                    # composition needs to be the exact size
+                    if len(state[1]) == len(composition):
+                        exists = True
+                        for node in state[1]:
+                            if node not in composition:
+                                exists = False
+                        # if it exists, set the transition to that state
+                        if exists:
+                            if transition in transitions:
+                                transitions.remove(transition)
+                            transitions.add(str(transition + ':q' + str(index + len(states))))
+                            if transition in temp_transitions:
+                                temp_transitions.remove(transition) 
+                            temp_transitions.add(str(transition + ':q'+ str(index + len(states))))
                             break
                 print('State exists: ' + str(exists))
                 # if the state did exist, change transition to it. Else create the state
                 if not exists:
-                    temp_transitions.remove(transition)
+                    if transition in temp_transitions:
+                                temp_transitions.remove(transition)
                     temp_transitions.add(transition + ':q'+ str(len(states) + len(new_states)))
                     print('Transition was: ' + transition)
                     print('Transition changed to : ' + transition + ':q'+ str(len(states) + len(new_states)))
@@ -349,26 +368,28 @@ def de_simone(re):
                         else:
                             composure.append(None)
                     print('Compositions: ' + str(composure))
-                    temp_states.append([copy.copy(transitions), copy.copy(composition), final])
+                    new_states.append([copy.copy(transitions), copy.copy(composition), final])
                 print('Final transitions: ' + str(transitions))
                 composition.clear()
                 transitions.clear()
-            new_state[0] = copy.copy(temp_transitions)
-            temp_transitions.clear
+        new_states[0][0] = copy.copy(temp_transitions)
+        temp_transitions.clear()
 
         # adds all new states to checked states
         print()
         print('------ Finished Transitions ------')
-        states.extend(new_states)
+        states.append(new_states.pop(0))
+
         # set new states as all those found out
-        new_states = temp_states
         print(' States remaining: ' + str(len(new_states)))
-        # clears the list of those found out
-        temp_states = list()
 
     # now all is left is to create the state machine
     fa = Finite_Automata()
 
+    print()
+    print('------ Finished State Creations -------')
+    print('Expression: ' + re)
+    print('States: ')
     for index, state in enumerate(states):
         # name, initial, final
         name = 'q' + str(index)
@@ -393,10 +414,14 @@ def de_simone(re):
 
     fa.add_initial('q0')
 
+    print('---------------------------------------')
+    print('----------------Ended------------------')
+    print('---------------------------------------')
+
     return fa
 
 if __name__ == '__main__':
-    strings = ['a|a*c'] #, '((a|b)*ab)|a', '(a|b)']
+    strings = ['a|a*c', '(a|b)', '((a|b)*ab)']
     finite_automatas = list()
 
     for element in strings:
