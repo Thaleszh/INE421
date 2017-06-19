@@ -274,7 +274,7 @@ class gui():
 		self.FA_list.append(new_fa)
 
 		print()
-		print("Automata1: " + new_fa.name)
+		print("Automata2: " + new_fa.name)
 		print('initial state: ' + new_fa.initials)
 		print('States:')
 		print(new_fa.states)
@@ -285,18 +285,67 @@ class gui():
 		print('Alphabet: ')
 		print(new_fa.alphabet)		
 		self.add_tab(new_fa.name, ['FA', new_fa.alphabet])
-		self.update_table()
 
 	def intersection_event(self):
-		intersection_text1, ok = QInputDialog.getText(self.main_window, 'Intersection','Choose the first automata')
+		found = False
+		while not found:
+			union_text1, ok = QInputDialog.getText(self.main_window, 'Intersection', 'Name of the second automata:')
+			if ok:
+				found = False
+				for automata in self.FA_list:
+					if union_text1 == automata.name:
+						found = True
+						print('going to intersect ' + self.current_fa.name + ' with ' + automata.name)
+						self.intersect_(self.current_fa, automata)
+				if not found:
+					again = QMessageBox.question(self.main_window, 'Not Found', 'The second automata was not found, try again?', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+					if again == QMessageBox.No:
+						break
 
-		if ok:
-			self.le1.setText(str(union_text1))
+	def intersect_(self, automata1, automata2):
+		print("------Intersection------")
+		print("Automata1: " + automata1.name)
+		print('initial state: ' + automata1.initials)
+		print('States:')
+		print(automata1.states)
+		print('Finals:')
+		print(automata1.finals)
+		print('Transitions: ')
+		print(automata1.transitions)
+		print('Alphabet: ')
+		print(automata1.alphabet)
 
-		intersection_text2, ok = QInputDialog.getText(self.main_window, 'Intersection', 'Choose the second automata')
+		print()
+		print("Automata1: " + automata2.name)
+		print('initial state: ' + automata2.initials)
+		print('States:')
+		print(automata2.states)
+		print('Finals:')
+		print(automata2.finals)
+		print('Transitions: ')
+		print(automata2.transitions)
+		print('Alphabet: ')
+		print(automata2.alphabet)
+		new_fa = intersection(automata1, automata2)
+		print('intersection done')
+		new_fa.name = automata1.name + ' v ' + automata2.name
+		print('name of new automata: ' + new_fa.name)
+		new_fa.calculate_alphabet()
 
-		if ok:
-			self.le2.setText(str(union_text2))
+		self.FA_list.append(new_fa)
+
+		print()
+		print("Automata2: " + new_fa.name)
+		print('initial state: ' + new_fa.initials)
+		print('States:')
+		print(new_fa.states)
+		print('Finals:')
+		print(new_fa.finals)
+		print('Transitions: ')
+		print(new_fa.transitions)
+		print('Alphabet: ')
+		print(new_fa.alphabet)		
+		self.add_tab(new_fa.name, ['FA', new_fa.alphabet])
 
 	def complement_event(self):
 		temp_fa = complement(self.current_fa)
@@ -305,15 +354,65 @@ class gui():
 		self.update_table()
 
 	def diff_event(self):
-		diff_text1, ok = QInputDialog.getText(self.main_window, 'Difference', 'Choose the first automata')
+		found = False
+		while not found:
+			union_text1, ok = QInputDialog.getText(self.main_window, 'Difference', 'Name of the second automata:')
+			if ok:
+				found = False
+				for automata in self.FA_list:
+					if union_text1 == automata.name:
+						found = True
+						print('going to difference ' + self.current_fa.name + ' with ' + automata.name)
+						self.diff_(self.current_fa, automata)
+				if not found:
+					again = QMessageBox.question(self.main_window, 'Not Found', 'The second automata was not found, try again?', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+					if again == QMessageBox.No:
+						break
 
-		if ok:
-			self.le1.setText(str(union_text1))
+	def diff_(self, automata1, automata2):
+		print("------Difference------")
+		print("Automata1: " + automata1.name)
+		print('initial state: ' + automata1.initials)
+		print('States:')
+		print(automata1.states)
+		print('Finals:')
+		print(automata1.finals)
+		print('Transitions: ')
+		print(automata1.transitions)
+		print('Alphabet: ')
+		print(automata1.alphabet)
 
-		diff_text2, ok = QInputDialog.getText(self.main_window, 'Difference', 'Choose the second automata')
+		print()
+		print("Automata1: " + automata2.name)
+		print('initial state: ' + automata2.initials)
+		print('States:')
+		print(automata2.states)
+		print('Finals:')
+		print(automata2.finals)
+		print('Transitions: ')
+		print(automata2.transitions)
+		print('Alphabet: ')
+		print(automata2.alphabet)
+		new_fa = dif(automata1, automata2)
+		print('Diference done')
+		new_fa.name = automata1.name + ' - ' + automata2.name
+		print('name of new automata: ' + new_fa.name)
+		new_fa.calculate_alphabet()
 
-		if ok:
-			self.le2.setText(str(union_text2))
+		self.FA_list.append(new_fa)
+
+		print()
+		print("Automata2: " + new_fa.name)
+		print('initial state: ' + new_fa.initials)
+		print('States:')
+		print(new_fa.states)
+		print('Finals:')
+		print(new_fa.finals)
+		print('Transitions: ')
+		print(new_fa.transitions)
+		print('Alphabet: ')
+		print(new_fa.alphabet)		
+		self.add_tab(new_fa.name, ['FA', new_fa.alphabet])
 
 	def minimize_event(self):
 		minimize(self.current_fa)
@@ -344,14 +443,14 @@ class gui():
 		if not self.disable_changes:
 			current_tab = self.tabs.currentWidget()
 			current_item = current_tab.table_widget.item(row, column)
-
-			if current_item.text() != '' :
-				self.current_fa.delete_all_transitions(current_tab.states[row], current_tab.characters[column])
-				self.current_fa.create_transition(current_tab.states[row], current_item.text() , current_tab.characters[column])
-			else:
-				self.current_fa.delete_all_transitions(current_tab.states[row], current_tab.characters[column])
-			#might have added new state
-			self.update_table()
+			if current_item:
+				if current_item.text() != '' :
+					self.current_fa.delete_all_transitions(current_tab.states[row], current_tab.characters[column])
+					self.current_fa.create_transition(current_tab.states[row], current_item.text() , current_tab.characters[column])
+				else:
+					self.current_fa.delete_all_transitions(current_tab.states[row], current_tab.characters[column])
+				#might have added new state
+				self.update_table()
 
 	def update_table(self):
 		current_tab = self.tabs.currentWidget()
@@ -382,7 +481,7 @@ class gui():
 				keys = self.current_fa.transitions[state].keys()
 				for key in keys:
 					item = current_tab.table_widget.item(index, current_tab.characters.index(key))
-					if item is not None:
+					if item:
 						item.setText(self.current_fa.transitions[state][key])
 		self.disable_changes = False
 
@@ -444,3 +543,4 @@ if __name__ == '__main__':
 	app = QApplication(sys.argv)
 	ex = gui()
 	sys.exit(app.exec_())  
+
