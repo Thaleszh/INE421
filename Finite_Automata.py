@@ -50,13 +50,13 @@ class Finite_Automata(object):
             keys = list(self.transitions[q].keys())
             for key in keys:
                 trans_split = self.transitions[q][key].split(", ")
-                if self.transitions[q][key] is name:
-                    del self.transitions[q][key]
                 if name in trans_split:
                     trans_split.remove(name)
                     self.transitions[q][key] = ""
                     for st in trans_split:
                         self.transitions[q][key] += st
+                if self.transitions[q][key] is name:
+                    del self.transitions[q][key]
         self.calculate_alphabet()
         if name == self.initials:
             self.initials = ""
