@@ -283,3 +283,8 @@ def intersection(fa1, fa2):
 
 def dif(fa1, fa2):
     return intersection(fa1, complement(fa2))
+
+def equivalence(fa1, fa2):
+    fa3 = dif(fa1, fa2)
+    equals = fa3.finals == []
+    return equals
