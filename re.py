@@ -422,9 +422,10 @@ def de_simone(re):
     return fa
 
 if __name__ == '__main__':
-    strings = ['a|a*c', '(a|b)', '((a|b)*ab)', 'a?((b|a(ba*))*)']
+    strings = ['a|a*c', '(a|b)', '((a|b)*ab)', 'a?((b|a(ba*))*)', 'e(f|eef*)(fe)*']
     finite_automatas = list()
 
     for element in strings:
         print(dot_placer(element, set()))
+
         finite_automatas.append(de_simone(element))
