@@ -6,10 +6,10 @@ Interface Gráfica
 -----------------
 O programa é composto por uma janela principal onde é possível acessar todas as
 funções implementadas. Na barra principal existem dois menus, File e Edit.
- - **File:**Acessando o menu File é possível criar um novo Autômato Finito 
+ - **File**:Acessando o menu File é possível criar um novo Autômato Finito 
    ou Expressão Regular. Existe também a opção de fechar a aplicação
 
- - **Edit:**Esse Menu contêm todas as operações que se pode aplicar nos
+ - **Edit**:Esse Menu contêm todas as operações que se pode aplicar nos
    Autômatos Finitos ou Expressões Regulares.
 
 Os Autômatos são representados em tabelas e divididos em abas. O autômato cuja
