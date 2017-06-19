@@ -1,6 +1,4 @@
-# INE5421
-Linguagens Formais e Compiladores
-=================================
+# INE5421 - Linguagens Formais e Compiladores
 
 Instruções de Uso
 -----------------
