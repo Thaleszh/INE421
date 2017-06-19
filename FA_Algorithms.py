@@ -222,7 +222,7 @@ def union(fa1, fa2):
     #criar novo automato
     fa3 = Finite_Automata()
 
-    fa3.alphabet = fa1.alphabet + fa2.alphabet
+    fa3.alphabet = fa1.alphabet | fa2.alphabet
     fa3.states = fa1.states + fa2.states
     fa3.finals = fa1.finals + fa2.finals
     
@@ -246,7 +246,7 @@ def union(fa1, fa2):
         fa3.create_transition(fa3.initials, 
                               fa2.transitions[fa2.initials][k],
                               k)
-    for s in fa1.transitions.keys():
+    for s in fa1.states:
         for k in fa1.transitions[s].keys():
             fa3.create_transition(s,fa1.transitions[s][k], k)
 
@@ -270,7 +270,7 @@ def complement(fa1):
     fa2.initials = fa1.initials
 
     for a in fa1.alphabet:
-        fa2.alphabet.append(a)
+        fa2.alphabet.add(a)
 
     for k in fa1.transitions.keys():
         fa2.transitions[k] = {}

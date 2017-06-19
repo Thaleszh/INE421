@@ -7,7 +7,7 @@ class Finite_Automata(object):
         self.initials = ""
         self.finals = []
         self.transitions = {}
-        self.alphabet = [] 
+        self.alphabet = set() 
         self.states = []
         #	[transitions, final, initial]
         #	Example state: 
@@ -17,12 +17,12 @@ class Finite_Automata(object):
         self.name = name
 
     def calculate_alphabet(self):
-        new_alphabet = []
+        new_alphabet = set()
         for q in self.transitions.keys():
             for k in self.transitions[q].keys():
                 if k not in new_alphabet:
-                    new_alphabet.append(k)
-        self.alphabet = [x for x in new_alphabet]
+                    new_alphabet.add(k)
+        self.alphabet = {x for x in new_alphabet}
 
     def add_final(self, name_state):
         self.finals.append(name_state)
@@ -63,9 +63,9 @@ class Finite_Automata(object):
 
     def create_transition(self, name_state1, name_state2, key):
         if name_state1 not in self.states:
-            self.create_state2(name_state1, False, False)
+            self.create_state(name_state1, False, False)
         if name_state2 not in self.states:
-            self.create_state2(name_state2, False, False)
+            self.create_state(name_state2, False, False)
         self.create_transition_aux(name_state1)
         if key in self.transitions[name_state1].keys():
             split = self.transitions[name_state1][key].split(', ')
@@ -74,7 +74,7 @@ class Finite_Automata(object):
         else:
             self.transitions[name_state1][key] = name_state2
         if key not in self.alphabet:
-            self.alphabet.append(key)
+            self.alphabet.add(key)
        
     def delete_transition(self, name_state1, name_state2, key):
         if name_state1 not in self.transitions.keys():
