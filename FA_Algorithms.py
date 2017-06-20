@@ -9,8 +9,9 @@ def remove_unacess(fa):
     while acessiveis != aux_acessiveis:
         aux_acessiveis = {x for x in acessiveis} 
         for s in aux_acessiveis:
-            for a in fa.transitions[s].keys():
-                acessiveis.add(fa.transitions[s][a])
+            if s in fa.transitions.keys():
+                for a in fa.transitions[s].keys():
+                    acessiveis.add(fa.transitions[s][a])
     #remover estados inacessiveis
     states = [x for x in fa.states]
     for st in states:
@@ -24,9 +25,10 @@ def remove_dead(fa):
     while vivos != aux_vivos:
         aux_vivos = {x for x in vivos}
         for s in fa.states:
-            for a in fa.transitions[s].keys():
-                if fa.transitions[s][a] in aux_vivos:
-                    vivos.add(s)
+            if s in fa.transitions.keys():
+                for a in fa.transitions[s].keys():
+                    if fa.transitions[s][a] in aux_vivos:
+                        vivos.add(s)
     #remover estados mortos
     states = [x for x in fa.states]
     for st in states:
