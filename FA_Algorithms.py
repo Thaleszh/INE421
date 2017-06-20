@@ -274,7 +274,7 @@ def complement(fa1):
 
     for k in fa1.transitions.keys():
         fa2.transitions[k] = {}
-        for a in fa1.alphabet:
+        for a in fa1.tansitions[k].keys():
             fa2.transitions[k][a] = fa1.transitions[k][a]
     return fa2
 
