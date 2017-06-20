@@ -246,11 +246,11 @@ def union(fa1, fa2):
         fa3.create_transition(fa3.initials, 
                               fa2.transitions[fa2.initials][k],
                               k)
-    for s in fa1.states:
+    for s in fa1.transitions.keys():
         for k in fa1.transitions[s].keys():
             fa3.create_transition(s,fa1.transitions[s][k], k)
 
-    for s in fa2.states:
+    for s in fa2.transitions.keys():
         for k in fa2.transitions[s].keys():
             fa3.create_transition(s,fa2.transitions[s][k], k)
 
