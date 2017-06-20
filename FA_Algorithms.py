@@ -286,5 +286,7 @@ def dif(fa1, fa2):
 
 def equivalence(fa1, fa2):
     fa3 = dif(fa1, fa2)
-    equals = fa3.finals == []
-    return equals
+    fa4 = dif(fa2, fa1)
+    equals3 = fa3.finals == []
+    equals4 = fa4.finals == []
+    return equals3 and equals4
