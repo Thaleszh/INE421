@@ -538,7 +538,7 @@ class gui():
 		self.update_table()
 		copied_fa.name = 'old ' + copied_fa.name
 		self.FA_list.append(copied_fa)
-		self.add_tab('old ' + copied_fa.name, ['FA', alphabet])
+		self.add_tab(copied_fa.name, ['FA', alphabet])
 
 	def determinize_event(self):
 		copied_fa = self.current_fa
@@ -546,7 +546,7 @@ class gui():
 		self.update_table()
 		copied_fa.name = 'old ' + copied_fa.name
 		self.FA_list.append(copied_fa)
-		self.add_tab('old ' + copied_fa.name, ['FA', alphabet])
+		self.add_tab(copied_fa.name, ['FA', alphabet])
 
 	def new_fa(self):
 		self.expression, ok = QInputDialog.getText(self.main_window, 'FA Input', 'Enter the name of the Finite Automata: ')
