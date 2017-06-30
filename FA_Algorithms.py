@@ -1,5 +1,5 @@
 from Finite_Automata import Finite_Automata
-#import pdb
+import pdb
 
 def remove_unacess(fa):
     #verificar estados acessiveis
@@ -53,7 +53,7 @@ def minimize(fa):
     if "Fi" in fa.states:
         for k in fa.alphabet:
             fa.create_transition("Fi", "Fi", k)
-
+    
     #criar conjuntos de equivalencia iniciais
     set_F = {x for x in fa.finals}
     set_KF = set()
@@ -75,7 +75,8 @@ def minimize(fa):
     while algorithm_sets != aux_algorithm_sets:
         aux_algorithm_sets = [x for x in algorithm_sets]
         algorithm_sets = []
-
+        #pdb.set_trace()
+        #print(aux_algorithm_sets)
         #analisar cada conjunto de equivalencia
         for analysis_set in aux_algorithm_sets:
             #analisar cada estado dentro do conjunto e atualizar o dicionario de
@@ -87,7 +88,7 @@ def minimize(fa):
                         if state in fa.transitions.keys():
                             if fa.transitions[state][a] in aux_algorithm_sets[x]:
                                 equivalence[state][a] = str(x)
-            
+           
             #estados no analysis set
             keys = [x for x in analysis_set]
             aux_keys = [x for x in analysis_set]
@@ -116,6 +117,7 @@ def minimize(fa):
     
     #fim do while
     
+    #print(equivalence)
     new_initial = ""
     new_finals = []
     new_transitions = {}
@@ -196,16 +198,19 @@ def determinize_epsilon(fa):
     determinize(fa)
 
 def determinize(fa):
+    det_states = []
     states = []
     #loop de determinizacao
     while len(states) != len(fa.transitions.keys()):
+        for estado in fa.states:
+            det_states.append(estado)
         states = [x for x in fa.transitions.keys()]
         for s in states:
             for k in fa.transitions[s].keys():
                 st = fa.transitions[s][k]
                 #caso o mesmo simbolo leve a mais de um estado
                 #cria um novo estado equivalente
-                if st not in fa.states:
+                if st not in det_states:
                     fa.create_state(st, False, False)
                     each_state = st.split(", ")
                     for e in each_state:
@@ -215,7 +220,6 @@ def determinize(fa):
                             for a in fa.alphabet:
                                 if a in fa.transitions[e].keys():
                                     fa.create_transition(st, fa.transitions[e][a], a)
-
     #remover estados inutilizados apos determinizacao
     remove_unacess(fa)
     remove_dead(fa)
