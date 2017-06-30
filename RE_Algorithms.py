@@ -188,6 +188,8 @@ def de_simone(re):
             if component is not None:
                 composure.append(str(component.count) + '-' + component.operator)
             else:
+                if name not in fa.finals:
+                    fa.add_final(name)
                 composure.append(None)
         print('Compositions: ' + str(composure))
         fa.create_state(name, 0, state[2])
@@ -198,6 +200,8 @@ def de_simone(re):
                 fa.create_transition(name, str(splitted[1]), str(splitted[0]))
             else:
                 print('something is wrong')
+
+    print('Final States: ' + str(fa.finals))
 
     fa.add_initial('q0')
 
@@ -422,7 +426,7 @@ def dot_placer(re, alphabet):
     return new_re
 
 if __name__ == '__main__':
-    strings = ['a|a*c', '(a|b)', '((a|b)*ab)', 'a?((b|a(ba*))*)', 'e(f|eef*)(fe)*']
+    strings = ['a*(ba*ba*)*']
     finite_automatas = list()
 
     for element in strings:
