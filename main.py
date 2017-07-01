@@ -1,5 +1,5 @@
 from FA_Algorithms import determinize, minimize, complement, union, dif
-from FA_Algorithms import determinize_epsilon, equivalence
+from FA_Algorithms import determinize_epsilon, equivalence, intersection
 from RE_Algorithms import de_simone
 from Finite_Automata import Finite_Automata
 #import pdb
@@ -53,7 +53,7 @@ def main():
     print('\n')
     
 
-    fa3 = union(fa1, fa2)
+    fa3 = intersection(fa1, fa2)
     print('FA 3')
     print('a')
     print(fa3.alphabet)

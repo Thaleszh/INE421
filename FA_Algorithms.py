@@ -264,6 +264,19 @@ def union(fa1, fa2):
     return(fa3)
 
 def complement(fa1):
+    
+    #criar estado Fi e substituir indefinicoes por ele
+    states = [x for x in fa1.states]
+    alphabet = [x for x in fa1.alphabet]
+    for s in states:
+        for k in alphabet:
+            if k not in fa1.transitions[s].keys():
+                fa1.create_transition(s, "Fi", k)
+
+    if "Fi" in fa1.states:
+        for k in fa1.alphabet:
+            fa1.create_transition("Fi", "Fi", k)
+    
     #criar novo automato
     fa2 = Finite_Automata()
     
@@ -282,6 +295,7 @@ def complement(fa1):
         fa2.transitions[k] = {}
         for a in fa1.transitions[k].keys():
             fa2.transitions[k][a] = fa1.transitions[k][a]
+    
     return fa2
 
 def intersection(fa1, fa2):
