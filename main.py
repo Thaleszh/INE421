@@ -7,6 +7,67 @@ from Finite_Automata import Finite_Automata
 
 def main():
 
+    fa1 = Finite_Automata()
+    
+    fa1.create_state("S", True, True) 
+    fa1.create_state("A", False, False) 
+    
+    fa1.create_transition("S", "A", 'a')
+    fa1.create_transition("S", "S", 'b')
+    fa1.create_transition("A", "S", 'a')
+    fa1.create_transition("A", "A", 'b')
+
+    print('FA 1')
+    print('a')
+    print(fa1.alphabet)
+    print('sts')
+    print(fa1.states)
+    print('f')
+    print(fa1.finals)
+    print('i')
+    print(fa1.initials)
+    print('t')
+    print(fa1.transitions)
+    print('\n')
+    
+    fa2 = Finite_Automata()
+
+    fa2.create_state("Z", True, True) 
+    fa2.create_state("B", False, True) 
+    
+    fa2.create_transition("Z", "B", 'a')
+    fa2.create_transition("Z", "Z", 'b')
+    fa2.create_transition("B", "Z", 'b')
+    
+    print('FA 2')
+    print('a')
+    print(fa2.alphabet)
+    print('sts')
+    print(fa2.states)
+    print('f')
+    print(fa2.finals)
+    print('i')
+    print(fa2.initials)
+    print('t')
+    print(fa2.transitions)
+    print('\n')
+    
+
+    fa3 = union(fa1, fa2)
+    print('FA 3')
+    print('a')
+    print(fa3.alphabet)
+    print('sts')
+    print(fa3.states)
+    print('f')
+    print(fa3.finals)
+    print('i')
+    print(fa3.initials)
+    print('t')
+    print(fa3.transitions)
+    print('\n')
+    
+'''
     fa2 = Finite_Automata()
     
     fa2.create_state("A", True, True)
@@ -61,7 +122,7 @@ def main():
     print('t')
     print(fa2.transitions)
     print('\n')
-
+'''
 '''
     fa1 = Finite_Automata()
 
@@ -110,7 +171,6 @@ def main():
     print('\n')
 
 '''
-
 '''
     fa1 = Finite_Automata()
 
