@@ -4,6 +4,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import *
 from Finite_Automata import Finite_Automata
 from FA_Algorithms import *
+import copy
 import RE_Algorithms
 
 class gui():
@@ -529,24 +530,28 @@ class gui():
 		print('Transitions: ')
 		print(new_fa.transitions)
 		print('Alphabet: ')
-		print(new_fa.alphabet)		
+		print(new_fa.alphabet)	
 		self.add_tab(new_fa.name, ['FA', new_fa.alphabet])
 
 	def minimize_event(self):
-		copied_fa = self.current_fa
 		minimize(self.current_fa)
 		self.update_table()
-		copied_fa.name = 'old ' + copied_fa.name
-		self.FA_list.append(copied_fa)
-		self.add_tab(copied_fa.name, ['FA', alphabet])
+		'''new_fa = copy.copy(self.current_fa)
+		minimize(new_fa)
+		new_fa.name = 'min ' + new_fa.name
+		new_fa.calculate_alphabet()
+		self.FA_list.append(new_fa)
+		self.add_tab(new_fa.name, ['FA', new_fa.alphabet])aa'''
 
 	def determinize_event(self):
-		copied_fa = self.current_fa
 		determinize(self.current_fa)
 		self.update_table()
-		copied_fa.name = 'old ' + copied_fa.name
-		self.FA_list.append(copied_fa)
-		self.add_tab(copied_fa.name, ['FA', alphabet])
+		'''new_fa = copy.copy(self.current_fa)
+		determinize(new_fa)
+		new_fa.name = 'det ' + new_fa.name
+		new_fa.calculate_alphabet()
+		self.FA_list.append(new_fa)
+		self.add_tab(new_fa.name, ['FA', new_fa.alphabet])'''
 
 	def new_fa(self):
 		self.expression, ok = QInputDialog.getText(self.main_window, 'FA Input', 'Enter the name of the Finite Automata: ')
