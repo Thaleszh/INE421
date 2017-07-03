@@ -7,6 +7,96 @@ from Finite_Automata import Finite_Automata
 
 def main():
 
+    fa2 = Finite_Automata()
+
+    fa2.create_state("q1", True, True)
+    fa2.create_state("q2", False, False)
+    fa2.create_state("q3", False, False)
+
+    fa2.create_transition("q1", "q1", 'a')
+    fa2.create_transition("q1", "q2", 'b')
+    fa2.create_transition("q1", "q3", 'b')
+    fa2.create_transition("q2", "q2", 'a')
+    fa2.create_transition("q2", "q3", 'b')
+    fa2.create_transition("q3", "q1", 'a')
+    fa2.create_transition("q3", "q3", 'b')
+
+    print('FA 2')
+    print('a')
+    print(fa2.alphabet)
+    print('sts')
+    print(fa2.states)
+    print('f')
+    print(fa2.finals)
+    print('i')
+    print(fa2.initials)
+    print('t')
+    print(fa2.transitions)
+    print('\n')
+
+    determinize(fa2)
+    print('det FA 2')
+    print('a')
+    print(fa2.alphabet)
+    print('sts')
+    print(fa2.states)
+    print('f')
+    print(fa2.finals)
+    print('i')
+    print(fa2.initials)
+    print('t')
+    print(fa2.transitions)
+    print('\n')
+
+'''
+    fa1 = Finite_Automata()
+
+    fa1.create_state("q0", True, False)
+    fa1.create_state("q1", False, False)
+    fa1.create_state("q2", False, True)
+    fa1.create_state("q3", False, False)
+    fa1.create_state("q4", False, True)
+
+    fa1.create_transition("q0", "q0", '0')
+    fa1.create_transition("q0", "q0", '1')
+    fa1.create_transition("q0", "q1", '0')
+    fa1.create_transition("q0", "q3", '1')
+    fa1.create_transition("q1", "q2", '0')
+    fa1.create_transition("q2", "q2", '0')
+    fa1.create_transition("q2", "q2", '1')
+    fa1.create_transition("q3", "q4", '1')
+    fa1.create_transition("q4", "q4", '0')
+    fa1.create_transition("q4", "q4", '1')
+
+    print('FA 1')
+    print('a')
+    print(fa1.alphabet)
+    print('sts')
+    print(fa1.states)
+    print('f')
+    print(fa1.finals)
+    print('i')
+    print(fa1.initials)
+    print('t')
+    print(fa1.transitions)
+    print('\n')
+
+    determinize(fa1)
+    print('det FA 1')
+    print('a')
+    print(fa1.alphabet)
+    print('sts')
+    print(fa1.states)
+    print('f')
+    print(fa1.finals)
+    print('i')
+    print(fa1.initials)
+    print('t')
+    print(fa1.transitions)
+    print('\n')
+
+'''
+'''
     fa1 = Finite_Automata()
     
     fa1.create_state("S", True, True) 
@@ -66,7 +156,7 @@ def main():
     print('t')
     print(fa3.transitions)
     print('\n')
-    
+'''
 '''
     fa2 = Finite_Automata()
     
@@ -122,54 +212,6 @@ def main():
     print('t')
     print(fa2.transitions)
     print('\n')
-'''
-'''
-    fa1 = Finite_Automata()
-
-    fa1.create_state("q0", True, False)
-    fa1.create_state("q1", False, False)
-    fa1.create_state("q2", False, True)
-    fa1.create_state("q3", False, False)
-    fa1.create_state("q4", False, True)
-
-    fa1.create_transition("q0", "q0", '0')
-    fa1.create_transition("q0", "q0", '1')
-    fa1.create_transition("q0", "q1", '0')
-    fa1.create_transition("q0", "q3", '1')
-    fa1.create_transition("q1", "q2", '0')
-    fa1.create_transition("q2", "q2", '0')
-    fa1.create_transition("q2", "q2", '1')
-    fa1.create_transition("q3", "q4", '1')
-    fa1.create_transition("q4", "q4", '0')
-    fa1.create_transition("q4", "q4", '1')
-
-    print('FA 1')
-    print('a')
-    print(fa1.alphabet)
-    print('sts')
-    print(fa1.states)
-    print('f')
-    print(fa1.finals)
-    print('i')
-    print(fa1.initials)
-    print('t')
-    print(fa1.transitions)
-    print('\n')
-
-    determinize(fa1)
-    print('FA 1')
-    print('a')
-    print(fa1.alphabet)
-    print('sts')
-    print(fa1.states)
-    print('f')
-    print(fa1.finals)
-    print('i')
-    print(fa1.initials)
-    print('t')
-    print(fa1.transitions)
-    print('\n')
-
 '''
 '''
     fa1 = Finite_Automata()

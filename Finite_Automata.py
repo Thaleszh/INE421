@@ -109,11 +109,8 @@ class Finite_Automata(object):
             split = set(self.transitions[name1][key].split(', '))
             name_state2_split = set(name2.split(', '))
             simmetric_diff = name_state2_split ^ split
-            if simmetric_diff == set():
-                self.transitions[name1][key] += ', '+name2
-            else:
-                diff = name_state2_split - split
-                for d in diff:
+            for d in simmetric_diff:
+                if d not in split:
                     self.transitions[name1][key] += ', '+d
         else:
             self.transitions[name1][key] = name2
